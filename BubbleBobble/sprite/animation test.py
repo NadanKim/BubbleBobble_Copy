@@ -2,15 +2,15 @@ from pico2d import *
 
 open_canvas()
  
-character = load_image('magicianAttack.png')
+character = load_image('stagemove.png')
  
 frame= 0
 while(1):
     clear_canvas()
-    character.clip_draw(23*frame , 16*1,23, 16, 400, 400, 400, 200)
+    character.clip_draw(30*frame , 32*0,30, 32, 400, 400, 400, 200)
     delay(0.2) 
     update_canvas()
-    frame=(frame+1)%5
+    frame=(frame+1)%10
 
     get_events()
   
