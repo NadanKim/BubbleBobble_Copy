@@ -91,7 +91,7 @@ class STAGE:
         #bubble contack player
         for bubble in self.bubbles:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
-                if not bubble.state == bubble.STATE_PON and contact_check_two_object(bubble, self.player):
+                if not bubble.state == bubble.STATE_FLY and not bubble.state == bubble.STATE_PON and contact_check_two_object(bubble, self.player):
                     bubble.state = bubble.STATE_PON
 
 

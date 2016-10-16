@@ -1,5 +1,5 @@
-bigMaptile 1cut size : 16 X 16
-smallMapTile 1cut size : 8 X 8
+bigMaptile 1cut size : 50 X 50
+smallMapTile 1cut size : 25 X 25
 
 캐릭터 사이즈 16 x 16
 프레임 16개씩

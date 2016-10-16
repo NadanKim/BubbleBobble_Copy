@@ -59,7 +59,7 @@ def get_frame_time():
 
 def draw():
     clear_canvas()
-    #stage.background.draw(600, 400, 1200, 800)
+    stage.background.draw(600, 400, 1200, 800)
     for enemy in stage.enemies:
         enemy.draw()
     for bubble in stage.bubbles:
