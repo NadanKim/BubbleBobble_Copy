@@ -13,9 +13,9 @@ class WALKER():
     XSIZE, YSIZE = 50, 70
     sprite = None
 
-    def __init__(self):
-        self.x = 200
-        self.y = 400
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.stayTime = 7.0
         self.change_moveSpeed()
         self.jumpSpeedPPS = self.moveSpeedPPS

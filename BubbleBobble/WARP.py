@@ -3,12 +3,12 @@ from pico2d import *
 
 class WARP:
     warp = None
-    WARP_XSIZE_MAX, WARP_YSIZE_MAX = 15000, 15000
+    WARP_XSIZE_MAX, WARP_YSIZE_MAX = 100000, 100000
     def __init__(self):
-        self.currentStage = 0
         if WARP.warp == None:
             WARP.warp = load_image('sprite\\surround\\warp.png')
-        self.warping = True
+        self.warping = False
+        self.warpTime = 0.0
         self.warpXSize, self.warpYSize = 0, 0
 
 
@@ -19,7 +19,10 @@ class WARP:
 
     def update(self):
         if self.warping == True:
-            self.warpXSize += 180
-            self.warpYSize += 180
+            self.warpXSize += 1100
+            self.warpYSize += 1100
+            self.warpTime += 0.05
             if self.WARP_XSIZE_MAX <= self.warpXSize and self.WARP_YSIZE_MAX <= self.warpYSize:
+                self.warpXSize, self.warpYSize = 0, 0
+                self.warpTime = 0
                 self.warping = False
