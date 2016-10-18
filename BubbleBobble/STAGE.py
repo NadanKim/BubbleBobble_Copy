@@ -5,6 +5,7 @@ from TADPOLE import TADPOLE
 from PULPUL import PULPUL
 from BOSS import BOSS
 from WARP import WARP
+from TILE import TILE
 from pico2d import *
 import json
 
@@ -23,14 +24,14 @@ class STAGE:
         self.bubbles = []
         self.enemies = []
         self.attacks = []
+        self.tiles = []
         self.stages = []
-        self.isMoved = False
         if self.background == None:
             self.background = load_image("sprite\\surround\\background.png")
         if self.bigTile == None:
-            self.bigTile = load_image('sprite\\MapTile\\BIGTILE.png')
+            self.bigTile = load_image("sprite\\MapTile\\BIGTILE.png")
         if self.smallTile == None:
-            self.smallTile = load_image('sprite\\MapTile\\SMALLTILE.png')
+            self.smallTile = load_image("sprite\\MapTile\\SMALLTILE.png")
         self.stageData = None
 
     def update(self, frame_time):
@@ -60,31 +61,19 @@ class STAGE:
         self.contact_check()
 
 
-        if self.enemies == [] and self.stageMoveCount <= 0:
-            self.stageMoveCount = 8.0
-            self.warp.warping = True
-            self.isMoved = False
-        elif self.enemies == [] and 0 < self.stageMoveCount:
+        if self.enemies == [] and 0 < self.stageMoveCount:
             self.stageMoveCount -= 0.05
-        if self.enemies == [] and 0.4 <= self.warp.warpTime and self.isMoved == False:
-            self.isMoved = True
+        if self.enemies == [] and self.stageMoveCount <= 0:
+            self.stageMoveCount = 4.0
+            self.warp.warping = True
             self.stageMove()
-        if self.enemies == [] and self.isMoved == True:
-            #self.enemies.append(BOSS())
-            self.enemies.append(WALKER(200, 300))
-            self.enemies.append(MAGICIAN())
-            self.enemies.append(TADPOLE())
-            self.enemies.append(PULPUL())
+
 
     def draw(self):
         self.tileX, self.tileY = 0, 31
         self.background.draw(600, 400)
         for tile in self.stages:
-            if 0 < tile and tile < 100: #big tile
-                pass
-                self.bigTile.clip_draw((tile - 1) % 10 * self.stageSize * 2, int(9 - (tile - tile % 10) / 10) * self.stageSize * 2, self.stageSize * 2, self.stageSize * 2, self.tileSize * 2 + self.tileX * self.stageSize, self.tileSize * 2 + self.tileY * self.stageSize)
-            elif 101 <= tile and tile < 200:    #small tile
-                self.smallTile.clip_draw(((tile-100) - 1) % 10 * self.stageSize, int(9 - ((tile-100) - (tile-100) % 10) / 10) * self.stageSize, self.stageSize, self.stageSize, self.tileSize + self.tileX * self.stageSize, self.tileSize + self.tileY * self.stageSize)
+            tile.draw()
 
             self.tileX += 1
             if self.tileX == 48:
@@ -131,12 +120,44 @@ class STAGE:
 
 
     def stageMove(self):
+        #get stage data file
         fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
-        self.stages = stageData['layers'][0]['data']
+        #Set Player
+        self.player.FIRST_LOC_X = stageData['player']['x']
+        self.player.FIRST_LOC_Y = stageData['player']['y']
+        self.player.totalFrame = self.player.frame = 0
+        self.player.state = self.player.STATE_STAGEMOVE
+        self.player.change_actionPerTime()
         self.currentStage += 1
+        self.tileX, self.tileY = 0, 31
+        #Summon enemy
+        enemyCount = 0
+        enemyKind = stageData['enemy']['kind']
+        for enemy in enemyKind:
+            if enemy == 'WALKER':
+                self.enemies.append(WALKER(stageData['enemy']['coordinate'][enemyCount]['x'], stageData['enemy']['coordinate'][enemyCount]['y']))
+            elif enemy == 'MAGICIAN':
+                self.enemies.append(MAGICIAN(stageData['enemy']['coordinate'][enemyCount]['x'], stageData['enemy']['coordinate'][enemyCount]['y']))
+            elif enemy == 'TADPOLE':
+                self.enemies.append(TADPOLE(stageData['enemy']['coordinate'][enemyCount]['x'], stageData['enemy']['coordinate'][enemyCount]['y']))
+            elif enemy == 'PULPUL':
+                self.enemies.append(PULPUL(stageData['enemy']['coordinate'][enemyCount]['x'], stageData['enemy']['coordinate'][enemyCount]['y']))
+            elif enemy == 'BOSS':
+                self.enemies.append(BOSS(stageData['enemy']['coordinate'][enemyCount]['x'], stageData['enemy']['coordinate'][enemyCount]['y']))
+            enemyCount += 1
+        #Set Stage
+        self.stages = []
+        self.tiles = stageData['data']
+        for tile in self.tiles:
+            if not tile == 0:
+                self.stages.append(TILE(tile, self.tileX, self.tileY))
+            self.tileX += 1
+            if self.tileX == 48:
+                self.tileX = 0
+                self.tileY -= 1
         if self.currentStage == 3:
             self.currentStage = 1
 

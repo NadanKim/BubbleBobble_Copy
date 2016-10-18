@@ -16,7 +16,7 @@ class WALKER():
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.stayTime = 7.0
+        self.stayTime = 6.0
         self.change_moveSpeed()
         self.jumpSpeedPPS = self.moveSpeedPPS
         self.direct = random.randint(0, 1)
@@ -59,45 +59,45 @@ class WALKER():
 
     def handle_walk(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
 
     def handle_angry(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
 
     def handle_afraid(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime * 0.5)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 0.5)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime * 0.5)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 0.5)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
 
     def handle_dead(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         self.y += self.jumpSpeedPPS * self.frameTime * 0.5
         if self.frame == 11:

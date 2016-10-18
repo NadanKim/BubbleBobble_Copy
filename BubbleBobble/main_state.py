@@ -31,7 +31,7 @@ def handle_events():
             pass #PAUSE 구현
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
             special_key = True
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F10):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F10):    #no Die Ctrl F10
             if special_key == True:
                 if stage.player.noDie == False:
                     stage.player.noDie = True
@@ -39,6 +39,9 @@ def handle_events():
                 else:
                     stage.player.noDie = False
                     stage.player.noDieTime = 0
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F11):    #stage move Ctrl F11
+            if special_key == True:
+                stage.enemies = []
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F4):
             if draw_box == True:
                 draw_box = False
@@ -67,7 +70,6 @@ def draw():
     for attack in stage.attacks:
         attack.draw()
     stage.warp.draw()
-
     stage.player.draw()
 
     if draw_box == True:

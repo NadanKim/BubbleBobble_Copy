@@ -9,7 +9,7 @@ class WARP:
             WARP.warp = load_image('sprite\\surround\\warp.png')
         self.warping = False
         self.warpTime = 0.0
-        self.warpXSize, self.warpYSize = 0, 0
+        self.warpXSize, self.warpYSize = 1500, 1500
 
 
     def draw(self):
@@ -19,10 +19,10 @@ class WARP:
 
     def update(self):
         if self.warping == True:
-            self.warpXSize += 1100
-            self.warpYSize += 1100
+            self.warpXSize += 1500
+            self.warpYSize += 1500
             self.warpTime += 0.05
             if self.WARP_XSIZE_MAX <= self.warpXSize and self.WARP_YSIZE_MAX <= self.warpYSize:
-                self.warpXSize, self.warpYSize = 0, 0
+                self.warpXSize, self.warpYSize = 1500, 1500
                 self.warpTime = 0
                 self.warping = False

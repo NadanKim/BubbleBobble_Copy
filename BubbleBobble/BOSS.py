@@ -13,10 +13,10 @@ class BOSS():
     XSIZE, YSIZE = 250, 350
     sprite = None
 
-    def __init__(self):
-        self.stayTime = 7.0
-        self.x = 800
-        self.y = 400
+    def __init__(self, x ,y):
+        self.stayTime = 6.0
+        self.x = x
+        self.y = y
         self.change_moveSpeed()
         self.isAttack = 0
         self.direct = random.randint(0, 1)
@@ -60,13 +60,13 @@ class BOSS():
 
     def handle_walk(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
                 self.isAttack = 5
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
         if self.yDirect == self.DIRECT_UP:
@@ -82,13 +82,13 @@ class BOSS():
 
     def handle_angry(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x -  self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/ + 50, self.x -  self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
                 self.isAttack = 5
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
         if self.yDirect == self.DIRECT_UP:
@@ -103,12 +103,12 @@ class BOSS():
 
     def handle_dead(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x - self.moveSpeedPPS * self.frameTime)
-            if self.x == self.XSIZE/2:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime)
-            if self.x == 1200 - self.XSIZE/2:
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         self.y += self.movepSpeedPPS * self.frameTime * 0.5
         if self.frame == 11:

@@ -139,9 +139,9 @@ class PLAYER():
 
     def handle_move(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2, self.x -  self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.XSIZE/2 + 50, self.x -  self.moveSpeedPPS * self.frameTime)
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2, self.x + self.moveSpeedPPS * self.frameTime)
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
 
 
     def handle_attack(self):
@@ -228,7 +228,7 @@ class PLAYER():
             self.x = self.FIRST_LOC_X
         if not (self.y == self.FIRST_LOC_Y) and math.fabs(self.y - self.FIRST_LOC_Y) < self.stageMoveDy:
             self.y = self.FIRST_LOC_Y
-        if self.frame == 9:
+        if (self.x == self.FIRST_LOC_X) and (self.y == self.FIRST_LOC_Y) and self.frame == 9:
             self.direct = self.DIRECT_RIGHT
             self.stateTemp = self.state = self.STATE_STAY
             self.jumpPoint = 0
