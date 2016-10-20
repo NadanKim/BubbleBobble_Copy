@@ -51,7 +51,7 @@ class BOSS():
 
 
     def get_bb(self):
-        return self.x - self.XSIZE * 3 / 9, self.y - self.YSIZE * 2 / 5, self.x + self.XSIZE * 3 / 9, self.y + self.YSIZE * 3 / 9
+        return self.x - self.XSIZE * 3 / 9, self.y - self.YSIZE / 2, self.x + self.XSIZE * 3 / 9, self.y + self.YSIZE * 3 / 9
 
 
     def draw_bb(self):

@@ -38,9 +38,13 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
             if select == 150:
                 select = 250
+            elif select == 250:
+                select = 150
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
             if select == 250:
                 select = 150
+            elif select == 150:
+                select = 250
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
             if select == 250:
                 game_framework.change_state(main_state)

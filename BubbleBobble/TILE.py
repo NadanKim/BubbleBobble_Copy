@@ -26,6 +26,24 @@ class TILE:
             self.y = self.tileSize + tileY * self.stageSize
 
 
+    def get_bb(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.x - self.tileSize * 2, self.y - self.tileSize * 2, self.x + self.tileSize * 2, self.y + self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.x - self.tileSize, self.y - self.tileSize, self.x + self.tileSize, self.y + self.tileSize
+
+
+    def get_bb_y(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.y + self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.y + self.tileSize
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+
+
     def draw(self):
         if 0 < self.tileNumber and self.tileNumber <= 100:
             self.bigTile.clip_draw(self.left, self.bottom, self.size, self.size, self.x, self.y)

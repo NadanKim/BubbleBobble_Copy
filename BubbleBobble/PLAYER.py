@@ -82,7 +82,7 @@ class PLAYER():
 
 
     def get_bb(self):
-        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE * 2 / 5, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
+        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
 
 
     def draw_bb(self):
@@ -173,9 +173,6 @@ class PLAYER():
         if self.stateTemp == self.STATE_MOVE:
             self.handle_move()
         self.y -= self.jumpSpeedPPS * self.frameTime
-        if self.y <= self.yAtJump:
-            self.state = self.stateTemp
-            self.jumpPoint = 0
 
 
     def handle_burn(self):
@@ -270,6 +267,9 @@ class PLAYER():
                return BUBBLE(self.x-self.XSIZE/2, self.y, self.direct, self.attackRange)
             else:
                 return BUBBLE(self.x+self.XSIZE/2, self.y, self.direct, self.attackRange)
+        #make Gravity
+       # if self.jumpPoint == -1 and not self.state == self.STATE_DOWN and not self.state == self.STATE_DEAD and not self.state == self.STATE_BURN and not self.state == self.STATE_STAGEMOVE:
+        #    self.handle_down()
 
 
     def draw(self):

@@ -51,7 +51,7 @@ class PULPUL():
 
 
     def get_bb(self):
-        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE * 2 / 5, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
+        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
 
 
     def draw_bb(self):

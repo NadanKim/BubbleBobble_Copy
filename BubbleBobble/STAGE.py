@@ -70,15 +70,9 @@ class STAGE:
 
 
     def draw(self):
-        self.tileX, self.tileY = 0, 31
         self.background.draw(600, 400)
         for tile in self.stages:
             tile.draw()
-
-            self.tileX += 1
-            if self.tileX == 48:
-                self.tileX = 0
-                self.tileY -= 1
 
 
     def contact_check(self):
@@ -95,28 +89,43 @@ class STAGE:
                     self.bubbles[-1].state = self.bubbles[-1].STATE_PON
                     break
         #enemy's attack check
-        for enemy in self.enemies:
-            if not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and not enemy.state == enemy.STATE_PON and not enemy.state == enemy.STATE_DEAD and not enemy.state == enemy.STATE_NONE:
-                if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
-                    self.player.frame = self.player.totalFrame = 0
-                    self.player.state = self.player.STATE_DEAD
-                    self.player.change_actionPerTime()
-            elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
-                if contact_check_two_object(self.player, enemy):
-                    enemy.frame = enemy.totalFrame = 0
-                    enemy.state = enemy.STATE_DEAD
-                    enemy.change_actionPerTime()
-        for attack in self.attacks:
-            if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
-                if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
-                    self.player.frame = self.player.totalFrame = 0
-                    self.player.state = self.player.STATE_DEAD
-                    self.player.change_actionPerTime()
+        if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
+            for enemy in self.enemies:
+                if not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and not enemy.state == enemy.STATE_PON and not enemy.state == enemy.STATE_DEAD and not enemy.state == enemy.STATE_NONE:
+                    if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
+                        self.player.frame = self.player.totalFrame = 0
+                        self.player.state = self.player.STATE_DEAD
+                        self.player.change_actionPerTime()
+                elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
+                    if contact_check_two_object(self.player, enemy):
+                        enemy.frame = enemy.totalFrame = 0
+                        enemy.state = enemy.STATE_DEAD
+                        enemy.change_actionPerTime()
+            for attack in self.attacks:
+                if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
+                    if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
+                        self.player.frame = self.player.totalFrame = 0
+                        self.player.state = self.player.STATE_DEAD
+                        self.player.change_actionPerTime()
         #bubble contack player
         for bubble in self.bubbles:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
                 if not bubble.state == bubble.STATE_FLY and not bubble.state == bubble.STATE_PON and contact_check_two_object(bubble, self.player):
                     bubble.state = bubble.STATE_PON
+        #player contack stage
+        changed = False
+        for tile in self.stages:
+            if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
+                if not self.player.stateTemp == self.player.STATE_JUMP and not self.player.state == self.player.STATE_JUMP and tile.y < self.player.y and contact_check_two_object(self.player, tile):
+                    changed = True
+                    self.player.y = self.player.YSIZE / 2 + tile.get_bb_y()
+                    if self.player.state == self.player.STATE_DOWN:
+                        self.player.state = self.player.stateTemp
+                    self.player.jumpPoint = 0
+        if not self.player.jumpPoint == 1 and not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE and changed == False:
+            if not self.player.state == self.player .STATE_DOWN and not self.player.state == self.player.STATE_ATTACK:
+                self.player.state = self.player.STATE_DOWN
+            self.player.jumpPoint = -1
 
 
     def stageMove(self):

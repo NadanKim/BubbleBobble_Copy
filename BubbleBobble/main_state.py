@@ -100,3 +100,5 @@ def draw_bb():
         bubble.draw_bb()
     for attack in stage.attacks:
         attack.draw_bb()
+    for tile in stage.stages:
+        tile.draw_bb()
