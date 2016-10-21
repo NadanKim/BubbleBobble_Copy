@@ -79,7 +79,7 @@ class STAGE:
         #player's attack check
         if not self.bubbles == [] and self.bubbles[-1].state == self.bubbles[-1].STATE_FLY:
             for enemy in self.enemies:
-                if not enemy.TYPE == 'BOSS' and not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and contact_check_two_object(self.bubbles[-1], enemy):
+                if not enemy.TYPE == 'BOSS' and not enemy.state == enemy.STATE_DEAD and not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and contact_check_two_object(self.bubbles[-1], enemy):
                     enemy.totalFrame = 0
                     enemy.state = enemy.STATE_STUCK_GREEN
                     self.bubbles[-1].state = self.bubbles[-1].STATE_NONE
@@ -91,11 +91,13 @@ class STAGE:
         #enemy's attack check
         if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
             for enemy in self.enemies:
+                #enemy is alive
                 if not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and not enemy.state == enemy.STATE_PON and not enemy.state == enemy.STATE_DEAD and not enemy.state == enemy.STATE_NONE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
                         self.player.change_actionPerTime()
+                #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
                     if contact_check_two_object(self.player, enemy):
                         enemy.frame = enemy.totalFrame = 0
@@ -116,7 +118,7 @@ class STAGE:
         changed = False
         for tile in self.stages:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
-                if not self.player.stateTemp == self.player.STATE_JUMP and not self.player.state == self.player.STATE_JUMP and tile.y < self.player.y and contact_check_two_object(self.player, tile):
+                if not self.player.jumpPoint == 1 and tile.y < 700 and tile.y < self.player.bfY - self.player.YSIZE / 2 and contact_check_two_object(self.player, tile):
                     changed = True
                     self.player.y = self.player.YSIZE / 2 + tile.get_bb_y()
                     if self.player.state == self.player.STATE_DOWN:
@@ -129,8 +131,10 @@ class STAGE:
 
 
     def stageMove(self):
+        self.bubbles = []
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
+        #fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage2.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -140,7 +144,7 @@ class STAGE:
         self.player.totalFrame = self.player.frame = 0
         self.player.state = self.player.STATE_STAGEMOVE
         self.player.change_actionPerTime()
-        self.currentStage += 1
+        #self.currentStage += 1
         self.tileX, self.tileY = 0, 31
         #Summon enemy
         enemyCount = 0
@@ -174,8 +178,8 @@ class STAGE:
 def contact_check_two_object(a, b):
     a_left, a_bottom, a_right, a_top = a.get_bb()
     b_left, b_bottom, b_right, b_top = b.get_bb()
-    if b_left <= a_right and a_right <= b_right or b_left <= a_left and a_left <= b_right:
-        if b_bottom <= a_top and a_top <= b_top or b_bottom <= a_bottom and a_bottom <= b_top:
+    if b_left <= a_right and a_right <= b_right or b_left <= a_left and a_left <= b_right or a_left <= b_right and b_right <= a_right or a_left <= b_left and b_left <= a_right:
+        if b_bottom <= a_top and a_top <= b_top or b_bottom <= a_bottom and a_bottom <= b_top or a_bottom <= b_top and b_top <= a_top or a_bottom <= b_bottom and b_bottom <= a_top:
             return True
     return False
 

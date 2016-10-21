@@ -5,7 +5,7 @@ class BUBBLE:
 
     RADIUS = 50
     PIXEL_PER_METER = (10.0 / 0.3)
-    MOVE_SPEED_KMPH = 70.0
+    MOVE_SPEED_KMPH = 80.0
     ACTION_PER_TIME = 1.0 / 1.2
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     STATE_FLY, STATE_NORMAL, STATE_NORMAL_PINK, STATE_NORMAL_RED, STATE_THUNDER = 14, 12, 11, 10, 9
@@ -15,6 +15,7 @@ class BUBBLE:
         self.frame, self.totalFrame = 0, 0
         self.frameTime = 0
         self.x, self.y = x, y
+        self.bfX = x
         self.first_loc_x = x
         self.direct = direct
         self.attackRange = attackRange
@@ -34,7 +35,13 @@ class BUBBLE:
 
 
     def get_bb(self):
-        return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
+        if self.state == self.STATE_FLY:
+            if self.direct == self.DIRECT_LEFT:
+                return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.bfX + self.RADIUS / 2, self.y + self.RADIUS / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.bfX - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
+        else:
+            return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
 
 
     def draw_bb(self):
@@ -47,11 +54,12 @@ class BUBBLE:
 
 
     def handle_fly(self):
+        self.bfX = self.x
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.RADIUS/2, self.x - self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.RADIUS/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
         else:
-            self.x = min(1200 - self.RADIUS/2, self.x + self.moveSpeedPPS * self.frameTime)
-        if self.first_loc_x + self.attackRange <= self.x or self.x <= self.first_loc_x - self.attackRange or self.x == self.RADIUS/2 or self.x == 1200 - self.RADIUS/2:
+            self.x = min(1200 - self.RADIUS/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+        if self.first_loc_x + self.attackRange <= self.x or self.x <= self.first_loc_x - self.attackRange or self.x == self.RADIUS/2 + 50 or self.x == 1200 - self.RADIUS/2 - 50:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_NORMAL
 

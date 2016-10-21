@@ -11,7 +11,7 @@ class PLAYER():
     STATE_JUMP, STATE_DOWN, STATE_BURN, STATE_STAGEMOVE = 3, 1, 13, 14
     FIRST_LOC_X, FIRST_LOC_Y = 400, 300
     PIXEL_PER_METER = (10.0 / 0.3)
-    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH, SPEED_CHANGE = 15.0, 30.0, 1.0
+    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH, SPEED_CHANGE = 15.0, 25.0, 1.0
     XSIZE, YSIZE = 50, 70
     sprite = None
     stageMove = None
@@ -21,9 +21,10 @@ class PLAYER():
         self.noDieTime = 0.0
         self.x = self.FIRST_LOC_X
         self.y = self.FIRST_LOC_Y
+        self.bfY = self.y
         self.currentSpeedKMPH = self.MIN_MOVE_SPEED_KMPH
-        self.change_moveSpeed()
-        self.jumpSpeedPPS = self.moveSpeedPPS
+        self.moveSpeedPPS = self.change_moveSpeed(self.currentSpeedKMPH)
+        self.jumpSpeedPPS = self.change_moveSpeed(self.MAX_MOVE_SPEED_KMPH)
         self.direct = self.DIRECT_RIGHT
         self.stateTemp = self.state = self.STATE_STAY
         self.frame, self.totalFrame = 0, 0
@@ -75,10 +76,10 @@ class PLAYER():
         self.actionPerTime = 1.0 / self.timePerAction
 
 
-    def change_moveSpeed(self):
-        moveSpeedMPM = self.currentSpeedKMPH * 1000.0 / 60.0
+    def change_moveSpeed(self, currentSpeedKMPH):
+        moveSpeedMPM = currentSpeedKMPH * 1000.0 / 60.0
         moveSpeedMPS = moveSpeedMPM / 60.0
-        self.moveSpeedPPS = moveSpeedMPS * self.PIXEL_PER_METER
+        return moveSpeedMPS * self.PIXEL_PER_METER
 
 
     def get_bb(self):
@@ -172,6 +173,7 @@ class PLAYER():
     def handle_down(self):
         if self.stateTemp == self.STATE_MOVE:
             self.handle_move()
+        self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
 
 
@@ -182,7 +184,7 @@ class PLAYER():
             self.direct = self.DIRECT_RIGHT
             self.stateTemp = self.state = self.STATE_STAY
             self.currentSpeedKMPH = self.MIN_MOVE_SPEED_KMPH
-            self.change_moveSpeed()
+            self.moveSpeedPPS = self.change_moveSpeed(self.currentSpeedKMPH)
             self.currentAttackTerm = self.ATTACK_TERM_MAX
             self.jumpPoint = 0
             self.couldAttack = 0
@@ -198,7 +200,7 @@ class PLAYER():
             self.direct = self.DIRECT_RIGHT
             self.stateTemp = self.state = self.STATE_STAY
             self.currentSpeedKMPH = self.MIN_MOVE_SPEED_KMPH
-            self.change_moveSpeed()
+            self.moveSpeedPPS = self.change_moveSpeed(self.currentSpeedKMPH)
             self.currentAttackTerm = self.ATTACK_TERM_MAX
             self.jumpPoint = 0
             self.couldAttack = 0
@@ -267,9 +269,6 @@ class PLAYER():
                return BUBBLE(self.x-self.XSIZE/2, self.y, self.direct, self.attackRange)
             else:
                 return BUBBLE(self.x+self.XSIZE/2, self.y, self.direct, self.attackRange)
-        #make Gravity
-       # if self.jumpPoint == -1 and not self.state == self.STATE_DOWN and not self.state == self.STATE_DEAD and not self.state == self.STATE_BURN and not self.state == self.STATE_STAGEMOVE:
-        #    self.handle_down()
 
 
     def draw(self):
