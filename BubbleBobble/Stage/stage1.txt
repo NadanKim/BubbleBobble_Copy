@@ -5,7 +5,7 @@
 	"y":100
 	},
  "enemy":{
-	"kind":["WALKER", "MAGICIAN", "TADPOLE", "PULPUL"],
+	"kind":["WALKER", "WALKER", "WALKER", "WALKER"],
 	"coordinate":[
 	{
 	"x":525,
