@@ -156,6 +156,8 @@ class WALKER():
         self.y -= self.jumpSpeedPPS * self.frameTime
         if self.y <= self.yAtJump:
             self.state = self.stateTemp
+        if self.y < -self.YSIZE:
+            self.y = 800
 
 
     handle_state = {

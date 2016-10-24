@@ -140,6 +140,8 @@ class MAGICIAN():
         if self.y <= self.yAtJump:
             self.state = self.stateTemp
             self.change_actionPerTime()
+        if self.y < -self.YSIZE:
+            self.y = 800
 
 
     def handle_stuck(self):

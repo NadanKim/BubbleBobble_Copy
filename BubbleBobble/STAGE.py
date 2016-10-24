@@ -133,8 +133,7 @@ class STAGE:
     def stageMove(self):
         self.bubbles = []
         #get stage data file
-        #fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
-        fileDirection = 'Stage\\stage2.txt'
+        fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -144,7 +143,7 @@ class STAGE:
         self.player.totalFrame = self.player.frame = 0
         self.player.state = self.player.STATE_STAGEMOVE
         self.player.change_actionPerTime()
-        #self.currentStage += 1
+        self.currentStage += 1
         self.tileX, self.tileY = 0, 31
         #Summon enemy
         enemyCount = 0
@@ -171,7 +170,7 @@ class STAGE:
             if self.tileX == 48:
                 self.tileX = 0
                 self.tileY -= 1
-        if self.currentStage == 3:
+        if self.currentStage == 4:
             self.currentStage = 1
 
 

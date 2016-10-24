@@ -175,6 +175,8 @@ class PLAYER():
             self.handle_move()
         self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
+        if self.y < -self.YSIZE:
+            self.y = 800
 
 
     def handle_burn(self):
