@@ -54,6 +54,22 @@ class BOSS():
         return self.x - self.XSIZE * 3 / 9, self.y - self.YSIZE / 2, self.x + self.XSIZE * 3 / 9, self.y + self.YSIZE * 3 / 9
 
 
+    def get_bb_left(self):
+        return self.x - self.XSIZE * 3 / 9
+
+
+    def get_bb_right(self):
+        return self.x + self.XSIZE * 3 / 9
+
+
+    def get_bb_top(self):
+        return self.y + self.YSIZE * 3 / 9
+
+
+    def get_bb_bottom(self):
+        return self.y - self.YSIZE / 2
+
+
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 

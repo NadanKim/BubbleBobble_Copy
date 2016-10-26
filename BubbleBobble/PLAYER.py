@@ -5,13 +5,13 @@ import math
 class PLAYER():
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     ATTACK_RANGE_MIN, ATTACK_RANGE_MAX, ATTACK_RANGE_CHANGE = 300, 450, 30
-    JUMP_MAX, JUMP_MIN, JUMP_CHANGE = 180, 120, 10
-    ATTACK_TERM_MAX, ATTACK_TERM_MIN, ATTACK_TERM_CHANGE = 16, 10, 2
+    JUMP_MAX, JUMP_MIN, JUMP_CHANGE = 160, 120, 10
+    ATTACK_TERM_MAX, ATTACK_TERM_MIN, ATTACK_TERM_CHANGE = 8, 4, 1
     STATE_STAY, STATE_MOVE, STATE_DEAD, STATE_ATTACK = 11, 9, 7, 5
     STATE_JUMP, STATE_DOWN, STATE_BURN, STATE_STAGEMOVE = 3, 1, 13, 14
     FIRST_LOC_X, FIRST_LOC_Y = 400, 300
     PIXEL_PER_METER = (10.0 / 0.3)
-    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH, SPEED_CHANGE = 15.0, 25.0, 1.0
+    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH, SPEED_CHANGE = 20.0, 30.0, 2.0
     XSIZE, YSIZE = 50, 70
     sprite = None
     stageMove = None
@@ -86,6 +86,22 @@ class PLAYER():
         return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
 
 
+    def get_bb_left(self):
+        return self.x - self.XSIZE * 2 / 5
+
+
+    def get_bb_right(self):
+        return self.x + self.XSIZE * 2 / 5
+
+
+    def get_bb_top(self):
+        return self.y + self.YSIZE * 2 / 5
+
+
+    def get_bb_bottom(self):
+        return self.y - self.YSIZE / 2
+
+
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
@@ -139,10 +155,14 @@ class PLAYER():
 
 
     def handle_move(self):
+        if self.state == self.STATE_DOWN:
+            divide = 2
+        else:
+            divide = 1
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2 + 50, self.x -  self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.XSIZE/2 + 50, self.x -  self.moveSpeedPPS * self.frameTime / divide)
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime / divide)
 
 
     def handle_attack(self):
@@ -176,7 +196,7 @@ class PLAYER():
         self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
         if self.y < -self.YSIZE:
-            self.y = 800
+            self.y = 750
 
 
     def handle_burn(self):
@@ -278,7 +298,7 @@ class PLAYER():
             self.stageMove.clip_draw(self.xStageMove * self.frame, self.yStageMove * (1 - self.direct),
                                   self.xStageMove, self.yStageMove, self.x, self.y, self.XSIZE*(self.xStageMove/self.xSprite), self.YSIZE*(self.yStageMove/self.ySprite))
         else:
-            if self.noDie == True and self.noDieTime % 4 == 0:
+            if self.noDie == True and self.noDieTime % 2 == 0:
                 self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * (-1),
                                       self.xSprite, self.ySprite, self.x, self.y, self.XSIZE, self.YSIZE)
             else:

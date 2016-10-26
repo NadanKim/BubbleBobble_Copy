@@ -6,16 +6,17 @@ class WALKER():
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     JUMP_HEIGHT = 120
     STATE_WALK, STATE_ANGRY, STATE_AFRAID, STATE_DEAD = 15, 13, 11, 9
-    STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = 7, 5, 3, 1, 99
+    STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE, STATE_ATTACK = 7, 5, 3, 1, 99, None
     STATE_JUMP, STATE_DOWN = 70, 71
     PIXEL_PER_METER = (10.0 / 0.3)
-    MOVE_SPEED_KMPH = 15.0
+    MOVE_SPEED_KMPH = 20.0
     XSIZE, YSIZE = 50, 70
     sprite = None
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.bfY = self.y
         self.stayTime = 6.0
         self.change_moveSpeed()
         self.jumpSpeedPPS = self.moveSpeedPPS
@@ -53,39 +54,66 @@ class WALKER():
     def get_bb(self):
         return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
 
+    def get_bb_left(self):
+        return self.x - self.XSIZE * 2 / 5
+
+
+    def get_bb_right(self):
+        return self.x + self.XSIZE * 2 / 5
+
+
+    def get_bb_top(self):
+        return self.y + self.YSIZE * 2 / 5
+
+
+    def get_bb_bottom(self):
+        return self.y - self.YSIZE / 2
+
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
 
     def handle_walk(self):
+        if self.state == self.STATE_DOWN:
+            divide = 2
+        else:
+            divide = 1
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime / divide)
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime / divide)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
 
     def handle_angry(self):
+        if self.state == self.STATE_DOWN:
+            divide = 2
+        else:
+            divide = 1
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 1.5)
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 1.5 / divide)
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 1.5 / divide)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
 
     def handle_afraid(self):
+        if self.state == self.STATE_DOWN:
+            divide = 2
+        else:
+            divide = 1
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 0.5)
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 0.5 / divide)
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
         elif self.direct == self.DIRECT_RIGHT:
-            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 0.5)
+            self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 0.5 / divide)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
 
@@ -153,11 +181,10 @@ class WALKER():
             self.handle_angry()
         elif self.stateTemp == self.STATE_AFRAID:
             self.handle_afraid()
+        self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
-        if self.y <= self.yAtJump:
-            self.state = self.stateTemp
         if self.y < -self.YSIZE:
-            self.y = 800
+            self.y = 750
 
 
     handle_state = {
@@ -188,7 +215,7 @@ class WALKER():
             if self.stayTime < 0:
                 self.stayTime = 0
         #change it self AI
-        if self.totalFrame % 16 <= 0.5 and not self.state == self.STATE_JUMP and not self.state == self.STATE_DOWN and not self.state == self.STATE_DEAD and not self.state == self.STATE_PON and not self.state == self.STATE_NONE and not self.state == self.STATE_STUCK_GREEN and not self.state == self.STATE_STUCK_YELLOW and not self.state == self.STATE_STUCK_RED and self.stayTime == 0:
+        if self.totalFrame % 6 <= 0.5 and not self.state == self.STATE_JUMP and not self.state == self.STATE_DOWN and not self.state == self.STATE_DEAD and not self.state == self.STATE_PON and not self.state == self.STATE_NONE and not self.state == self.STATE_STUCK_GREEN and not self.state == self.STATE_STUCK_YELLOW and not self.state == self.STATE_STUCK_RED and self.stayTime == 0:
             if random.randint(random.randint(0, 1), random.randint(1, 3)) == 1:
                 self.direct = self.DIRECT_LEFT
             else:

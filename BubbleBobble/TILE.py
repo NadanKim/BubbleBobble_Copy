@@ -39,6 +39,35 @@ class TILE:
         elif 100 < self.tileNumber and self.tileNumber <= 200:
             return self.y + self.tileSize
 
+
+    def get_bb_left(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.x - self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.x - self.tileSize
+
+
+    def get_bb_right(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.x + self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.x + self.tileSize
+
+
+    def get_bb_top(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.y + self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.y + self.tileSize
+
+
+    def get_bb_bottom(self):
+        if 0 < self.tileNumber and self.tileNumber <= 100:
+            return self.y - self.tileSize * 2
+        elif 100 < self.tileNumber and self.tileNumber <= 200:
+            return self.y - self.tileSize
+
+
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 

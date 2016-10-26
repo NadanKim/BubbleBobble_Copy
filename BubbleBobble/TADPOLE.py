@@ -8,7 +8,7 @@ class TADPOLE():
     STATE_WALK, STATE_ANGRY, STATE_AFRAID, STATE_DEAD = 15, 13, 11, 9
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = 7, 5, 3, 1, 99
     PIXEL_PER_METER = (10.0 / 0.3)
-    MOVE_SPEED_KMPH = 15.0
+    MOVE_SPEED_KMPH = 20.0
     XSIZE, YSIZE = 50, 70
     sprite = None
 
@@ -50,6 +50,22 @@ class TADPOLE():
 
     def get_bb(self):
         return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
+
+
+    def get_bb_left(self):
+        return self.x - self.XSIZE * 2 / 5
+
+
+    def get_bb_right(self):
+        return self.x + self.XSIZE * 2 / 5
+
+
+    def get_bb_top(self):
+        return self.y + self.YSIZE * 2 / 5
+
+
+    def get_bb_bottom(self):
+        return self.y - self.YSIZE / 2
 
 
     def draw_bb(self):
