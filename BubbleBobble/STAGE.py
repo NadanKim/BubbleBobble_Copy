@@ -118,12 +118,13 @@ class STAGE:
         self.contact_check_stage_player()
         #enemy contack stage
         self.contact_check_stage_walker()
+        self.contact_check_stage_flying()
 
 
     def stageMove(self):
         self.bubbles = []
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(3) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(4) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -240,6 +241,46 @@ class STAGE:
                 if not enemy.state == enemy.STATE_DOWN and not enemy.state == enemy.STATE_PON and not enemy.state == enemy.STATE_NONE and not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and not enemy.state == enemy.STATE_ATTACK:
                     enemy.stateTemp = enemy.state
                     enemy.state = enemy.STATE_DOWN
+
+
+
+    def contact_check_stage_flying(self):
+        changed = False
+        for enemy in self.enemies:
+            if enemy.TYPE in ("WALKER", "MAGICIAN", "BOSS"):
+                continue
+            for tile in self.stages:
+                if not enemy.state == enemy.STATE_DEAD:
+                    # check left or right tile
+                    if enemy.state in (enemy.STATE_WALK, enemy.STATE_ANGRY, enemy.STATE_AFRAID) or enemy.stateTemp == (enemy.STATE_WALK, enemy.STATE_ANGRY, enemy.STATE_AFRAID):
+                        if enemy.direct == enemy.DIRECT_LEFT:
+                            if tile.get_bb_bottom() < enemy.y and enemy.y < tile.get_bb_top():
+                                if tile.get_bb_left() < enemy.x - enemy.XSIZE / 2 and enemy.x - enemy.XSIZE / 2 < tile.get_bb_right():
+                                    enemy.x = tile.get_bb_right() + enemy.XSIZE / 2
+                                    enemy.direct = enemy.DIRECT_RIGHT
+                                    break
+                        elif enemy.direct == enemy.DIRECT_RIGHT:
+                            if tile.get_bb_bottom() < enemy.y and enemy.y < tile.get_bb_top():
+                                if tile.get_bb_left() < enemy.x + enemy.XSIZE / 2 and enemy.x + enemy.XSIZE / 2 < tile.get_bb_right():
+                                    enemy.x = tile.get_bb_left() - enemy.XSIZE / 2
+                                    enemy.direct = enemy.DIRECT_LEFT
+                                    break
+            for tile in self.stages:
+                if not enemy.state == enemy.STATE_DEAD:
+                    # check top or bottom tile
+                    if enemy.state in (enemy.STATE_WALK, enemy.STATE_ANGRY, enemy.STATE_AFRAID) or enemy.stateTemp == (enemy.STATE_WALK, enemy.STATE_ANGRY, enemy.STATE_AFRAID):
+                        if enemy.yDirect == enemy.DIRECT_UP:
+                            if tile.get_bb_left() < enemy.x and enemy.x < tile.get_bb_right():
+                                if tile.get_bb_bottom() < enemy.y + enemy.YSIZE / 2 and enemy.y + enemy.YSIZE / 2 < tile.get_bb_top():
+                                    enemy.y = tile.get_bb_bottom() - enemy.YSIZE / 2
+                                    enemy.yDirect = enemy.DIRECT_DOWN
+                                    break
+                        elif enemy.yDirect == enemy.DIRECT_DOWN:
+                            if tile.get_bb_left() < enemy.x and enemy.x < tile.get_bb_right():
+                                if tile.get_bb_bottom() < enemy.y - enemy.YSIZE / 2 and enemy.y - enemy.YSIZE / 2 < tile.get_bb_top():
+                                    enemy.y = tile.get_bb_top() + enemy.YSIZE / 2
+                                    enemy.yDirect = enemy.DIRECT_UP
+                                    break
 
 
 

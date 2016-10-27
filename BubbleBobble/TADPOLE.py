@@ -86,13 +86,13 @@ class TADPOLE():
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(800 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
-            if self.y == 800 - self.YSIZE / 2:
-                self.yDirect = self.DIRECT_DOWN
+            self.y = self.y + self.moveSpeedPPS * self.frameTime
+            if self.YSIZE + 750 < self.y:
+                self.y = -self.YSIZE
         elif self.yDirect == self.DIRECT_DOWN:
-            self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime)
-            if self.y == self.YSIZE / 2:
-                self.yDirect = self.DIRECT_UP
+            self.y = self.y - self.moveSpeedPPS * self.frameTime
+            if self.y < -self.YSIZE:
+                self.y = 750
 
 
 
@@ -106,13 +106,13 @@ class TADPOLE():
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(800 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.y == 800 - self.YSIZE / 2:
-                self.yDirect = self.DIRECT_DOWN
+            self.y = self.y + self.moveSpeedPPS * self.frameTime * 1.5
+            if self.YSIZE + 750 < self.y:
+                self.y = -self.YSIZE
         elif self.yDirect == self.DIRECT_DOWN:
-            self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.y == self.YSIZE / 2:
-                self.yDirect = self.DIRECT_UP
+            self.y = self.y - self.moveSpeedPPS * self.frameTime * 1.5
+            if self.y < -self.YSIZE:
+                self.y = 750
 
 
     def handle_afraid(self):
@@ -125,13 +125,13 @@ class TADPOLE():
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(800 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime * 0.5)
-            if self.y == 800 - self.YSIZE / 2:
-                self.yDirect = self.DIRECT_DOWN
+            self.y = self.y + self.moveSpeedPPS * self.frameTime * 0.5
+            if self.YSIZE + 750 < self.y:
+                self.y = -self.YSIZE
         elif self.yDirect == self.DIRECT_DOWN:
-            self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime * 0.5)
-            if self.y == self.YSIZE / 2:
-                self.yDirect = self.DIRECT_UP
+            self.y = self.y - self.moveSpeedPPS * self.frameTime * 0.5
+            if self.y < -self.YSIZE:
+                self.y = 750
 
 
     def handle_dead(self):

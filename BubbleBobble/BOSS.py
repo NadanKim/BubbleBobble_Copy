@@ -6,11 +6,11 @@ class BOSS():
     TYPE = 'BOSS'
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     DIRECT_UP, DIRECT_DOWN = 2, 3
-    STATE_WALK, STATE_ANGRY, STATE_DEAD = 9, 7, 5
+    STATE_WALK, STATE_ANGRY, STATE_DEAD, STATE_AFRAID = 9, 7, 5, None
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = None, None, 3, 1, 99
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 12.0
-    XSIZE, YSIZE = 250, 350
+    XSIZE, YSIZE = 200, 300
     sprite = None
 
     def __init__(self, x ,y):
@@ -86,8 +86,8 @@ class BOSS():
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(800 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
-            if self.y == 800 - self.YSIZE / 2:
+            self.y = min(700 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
+            if self.y == 700 - self.YSIZE / 2:
                 self.yDirect = self.DIRECT_DOWN
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime)
