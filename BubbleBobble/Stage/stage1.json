@@ -29,7 +29,7 @@
                 }, 
                 {
                  "height":50,
-                  "id": 2,
+                 "id":2,
                  "name":"WALKER",
                  "rotation":0,
                  "type":"WALKER",
@@ -54,7 +54,7 @@
                  "id":6,
                  "name":"PLAYER",
                  "rotation":0,
-                 "type":"PLAYER",
+                 "type":"DIRECT_RIGHT",
                  "visible":true,
                  "width":50,
                  "x":100,

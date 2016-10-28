@@ -21,7 +21,7 @@
                  "id":1,
                  "name":"PLAYER",
                  "rotation":0,
-                 "type":"",
+                 "type":"DIRECT_RIGHT",
                  "visible":true,
                  "width":50,
                  "x":100,

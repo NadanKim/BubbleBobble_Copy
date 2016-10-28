@@ -122,6 +122,11 @@ class STAGE:
 
 
     def stageMove(self):
+        direct = {
+            "DIRECT_RIGHT": self.player.DIRECT_RIGHT,
+            "DIRECT_LEFT": self.player.DIRECT_LEFT
+        }
+
         self.bubbles = []
         #get stage data file
         fileDirection = 'Stage\\stage' + str(4) + '.txt'#str(self.currentStage) + '.txt'
@@ -131,6 +136,7 @@ class STAGE:
         #Set Player
         self.player.FIRST_LOC_X = stageData['player']['x']
         self.player.FIRST_LOC_Y = stageData['player']['y']
+        self.player.direct = direct[stageData['player']['direct']]
         self.player.totalFrame = self.player.frame = 0
         self.player.state = self.player.STATE_STAGEMOVE
         self.player.change_actionPerTime()

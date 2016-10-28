@@ -250,7 +250,6 @@ class PLAYER():
         if not (self.y == self.FIRST_LOC_Y) and math.fabs(self.y - self.FIRST_LOC_Y) < self.stageMoveDy:
             self.y = self.FIRST_LOC_Y
         if (self.x == self.FIRST_LOC_X) and (self.y == self.FIRST_LOC_Y) and self.frame == 9:
-            self.direct = self.DIRECT_RIGHT
             self.stateTemp = self.state = self.STATE_STAY
             self.jumpPoint = 0
             self.couldAttack = 0
