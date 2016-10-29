@@ -25,7 +25,7 @@ class PULPUL():
         self.frame, self.totalFrame = 0, 0
         self.actionPerTime = 0.0
         self.frameTime = 0.0
-
+        self.stateTemp = None
         if PULPUL.sprite == None:
             PULPUL.sprite = load_image('sprite\\Enemy\\pulpul.png')
         self.xSprite = 16

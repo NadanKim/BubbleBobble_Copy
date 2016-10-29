@@ -25,7 +25,7 @@ class BOSS():
         self.frame, self.totalFrame = 0, 0
         self.actionPerTime = 0.0
         self.frameTime = 0.0
-
+        self.stateTemp = None
         if BOSS.sprite == None:
             BOSS.sprite = load_image('sprite\\Enemy\\boss.png')
         self.xSprite = 64

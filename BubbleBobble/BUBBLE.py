@@ -6,8 +6,9 @@ class BUBBLE:
     RADIUS = 50
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 80.0
+    FLY_SPEED_KMPH = 15.0
     ACTION_PER_TIME = 1.0 / 1.2
-    DIRECT_LEFT, DIRECT_RIGHT = 0, 1
+    DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_FLY, STATE_NORMAL, STATE_NORMAL_PINK, STATE_NORMAL_RED, STATE_THUNDER = 14, 12, 11, 10, 9
     STATE_THUNDER_PINK, STATE_THUNDER_RED, STATE_WATER, STATE_WATER_PINK, STATE_WATER_RED = 8, 7, 6, 5, 4
     STATE_FIRE, STATE_FIRE_PINK, STATE_FIRE_RED, STATE_PON, STATE_NONE = 3, 2, 1, 0, 99
@@ -20,18 +21,18 @@ class BUBBLE:
         self.direct = direct
         self.attackRange = attackRange
         self.state = self.STATE_FLY
-        self.moveSpeedPPS = 0.0
-        self.change_moveSpeed()
+        self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
+        self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         if BUBBLE.sprite == None:
             BUBBLE.sprite = load_image('sprite\\Effect\\bubbles.png')
         self.xSprite, self.ySprite = 14, 16
         self.numSprite = 6
 
 
-    def change_moveSpeed(self):
-        moveSpeedMPM = self.MOVE_SPEED_KMPH * 1000.0 / 60.0
+    def change_moveSpeed(self, MOVE_SPEED_KMPH):
+        moveSpeedMPM = MOVE_SPEED_KMPH * 1000.0 / 60.0
         moveSpeedMPS = moveSpeedMPM / 60.0
-        self.moveSpeedPPS = moveSpeedMPS * self.PIXEL_PER_METER
+        return moveSpeedMPS * self.PIXEL_PER_METER
 
 
     def get_bb(self):
@@ -56,34 +57,48 @@ class BUBBLE:
     def handle_fly(self):
         self.bfX = self.x
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.RADIUS/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.RADIUS/2, self.x - self.moveSpeedPPS * self.frameTime)
         else:
-            self.x = min(1200 - self.RADIUS/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
-        if self.first_loc_x + self.attackRange <= self.x or self.x <= self.first_loc_x - self.attackRange or self.x == self.RADIUS/2 + 50 or self.x == 1200 - self.RADIUS/2 - 50:
+            self.x = min(1200 - self.RADIUS/2, self.x + self.moveSpeedPPS * self.frameTime)
+        if self.first_loc_x + self.attackRange + self.moveSpeedPPS * self.frameTime <= self.x or self.x <= self.first_loc_x - self.attackRange - self.moveSpeedPPS * self.frameTime or \
+                        self.x == self.RADIUS/2 or self.x == 1200 - self.RADIUS/2:
+            if self.direct == self.DIRECT_LEFT:
+                self.x = max(self.RADIUS / 2, self.x + self.moveSpeedPPS * self.frameTime)
+            else:
+                self.x = min(1200 - self.RADIUS / 2, self.x - self.moveSpeedPPS * self.frameTime)
             self.totalFrame = self.frame = 0
             self.state = self.STATE_NORMAL
+            self.direct = self.DIRECT_UP
 
 
     def handle_normal(self):
-        if 35 <= self.totalFrame:
+        if self.direct == self.DIRECT_UP:
+            self.y += self.flySpeedPPS * self.frameTime
+            if 750 < self.y - self.RADIUS:
+                self.y = -self.RADIUS
+        elif self.direct == self.DIRECT_DOWN:
+            self.y -= self.flySpeedPPS * self.frameTime
+            if self.y + self.RADIUS < 0:
+                self.y = 750 + self.RADIUS
+        elif self.direct == self.DIRECT_LEFT:
+            self.x = max(self.RADIUS/2 + 50, self.x - self.flySpeedPPS * self.frameTime)
+        elif self.direct == self.DIRECT_RIGHT:
+            self.x = min(1200 - self.RADIUS / 2 - 50, self.x + self.flySpeedPPS * self.frameTime)
+
+        if self.state == self.STATE_NORMAL and 35 <= self.totalFrame:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_NORMAL_PINK
-
-
-    def handle_normalPink(self):
-        if 14 <= self.totalFrame:
+        elif self.state == self.STATE_NORMAL_PINK and 14 <= self.totalFrame:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_NORMAL_RED
-
-
-    def handle_normalRed(self):
-        if 7 <= self.totalFrame:
+        elif self.state == self.STATE_NORMAL_RED and 7 <= self.totalFrame:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_PON
 
 
+
     def handle_pon(self):
-        if self.frame == 4:
+        if 4<=self.totalFrame:
             self.state = self.STATE_NONE
 
 
@@ -94,8 +109,8 @@ class BUBBLE:
     handle_state = {
         STATE_FLY: handle_fly,
         STATE_NORMAL: handle_normal,
-        STATE_NORMAL_PINK: handle_normalPink,
-        STATE_NORMAL_RED: handle_normalRed,
+        STATE_NORMAL_PINK: handle_normal,
+        STATE_NORMAL_RED: handle_normal,
         STATE_PON: handle_pon,
         STATE_NONE: handle_none
     }
