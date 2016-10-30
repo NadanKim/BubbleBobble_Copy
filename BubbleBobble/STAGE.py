@@ -6,6 +6,7 @@ from PULPUL import PULPUL
 from BOSS import BOSS
 from WARP import WARP
 from TILE import TILE
+import random
 from pico2d import *
 import json
 
@@ -78,13 +79,15 @@ class STAGE:
     def contact_check(self):
         # bubble contact stage
         self.contact_check_stage_bubble()
+        self.contact_check_stage_enemyBubble()
         #player's attack check
         if not self.bubbles == [] and self.bubbles[-1].state == self.bubbles[-1].STATE_FLY:
             for enemy in self.enemies:
-                if not enemy.TYPE == 'BOSS' and not enemy.state == enemy.STATE_DEAD and not enemy.state == enemy.STATE_STUCK_GREEN \
-                        and not enemy.state == enemy.STATE_STUCK_YELLOW and not enemy.state == enemy.STATE_STUCK_RED and contact_check_two_object(self.bubbles[-1], enemy):
+                if not enemy.TYPE == 'BOSS' and enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON) \
+                        and contact_check_two_object(self.bubbles[-1], enemy):
                     enemy.totalFrame = 0
                     enemy.state = enemy.STATE_STUCK_GREEN
+                    enemy.direct = enemy.DIRECT_UP
                     self.bubbles[-1].state = self.bubbles[-1].STATE_NONE
                     break
                 elif enemy.TYPE == 'BOSS' and contact_check_two_object(self.bubbles[-1], enemy):
@@ -95,9 +98,7 @@ class STAGE:
         if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
             for enemy in self.enemies:
                 #enemy is alive
-                if not enemy.state == enemy.STATE_STUCK_GREEN and not enemy.state == enemy.STATE_STUCK_YELLOW \
-                        and not enemy.state == enemy.STATE_STUCK_RED and not enemy.state == enemy.STATE_PON and not enemy.state == enemy.STATE_DEAD \
-                        and not enemy.state == enemy.STATE_NONE:
+                if enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON):
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
@@ -105,6 +106,7 @@ class STAGE:
                 #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
                     if contact_check_two_object(self.player, enemy):
+                        enemy.direct = random.randint(0, 1)
                         enemy.frame = enemy.totalFrame = 0
                         enemy.state = enemy.STATE_DEAD
                         enemy.change_actionPerTime()
@@ -138,7 +140,7 @@ class STAGE:
 
         self.bubbles = []
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(3) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(4) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -176,7 +178,7 @@ class STAGE:
             if self.tileX == 48:
                 self.tileX = 0
                 self.tileY -= 1
-        #if self.currentStage == 5:
+        #if self.currentStage == 6:
          #   self.currentStage = 1
 
 
@@ -187,7 +189,7 @@ class STAGE:
     def contact_check_stage_player(self):
         for tile in self.stages:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN \
-                    and not self.player.state == self.player.STATE_STAGEMOVE and tile.y < 700:
+                    and not self.player.state == self.player.STATE_STAGEMOVE:
                 # check left or right tile
                 if self.player.jumpPoint == 1:
                     if self.player.get_bb_left() < tile.x and tile.x < self.player.get_bb_right():
@@ -206,7 +208,7 @@ class STAGE:
         changed = False
         for tile in self.stages:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN \
-                    and not self.player.state == self.player.STATE_STAGEMOVE and tile.y < 700:
+                    and not self.player.state == self.player.STATE_STAGEMOVE:
                 if not self.player.jumpPoint == 1 and tile.y < self.player.bfY - self.player.YSIZE / 2 and contact_check_two_object(
                         self.player, tile):
                     changed = True
@@ -227,7 +229,7 @@ class STAGE:
             if not enemy.TYPE in ("WALKER", "MAGICIAN"):
                 continue
             for tile in self.stages:
-                if not enemy.state == enemy.STATE_DEAD and tile.y < 700:
+                if not enemy.state == enemy.STATE_DEAD:
                     # check left or right tile
                     if enemy.state == enemy.STATE_JUMP:
                         if enemy.get_bb_left() < tile.x and tile.x < enemy.get_bb_right():
@@ -247,7 +249,7 @@ class STAGE:
                                     break
             changed = False
             for tile in self.stages:
-                if not enemy.state == enemy.STATE_DEAD and tile.y < 700:
+                if not enemy.state == enemy.STATE_DEAD:
                     if enemy.state == enemy.STATE_DOWN and tile.y < enemy.bfY - enemy.YSIZE / 2 and contact_check_two_object(enemy, tile):
                         changed = True
                         enemy.y = enemy.YSIZE / 2 + tile.get_bb_y()
@@ -310,7 +312,7 @@ class STAGE:
                 continue
             for tile in self.stages:
                 if bubble.direct == bubble.DIRECT_UP:
-                    if bubble.y + bubble.RADIUS/2 < tile.y and contact_check_two_object(bubble, tile):
+                    if bubble.y < tile.y and contact_check_two_object(bubble, tile):
                         bubble.y = tile.get_bb_bottom() - bubble.RADIUS / 2
                         if bubble.x < 600:
                             bubble.direct = bubble.DIRECT_RIGHT
@@ -325,7 +327,7 @@ class STAGE:
                             bubble.state = bubble.STATE_NORMAL
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.y + bubble.RADIUS/2 < tile.y and not contact_check_two_object(bubble, tile):
+                        if bubble.y < tile.y and not contact_check_two_object(bubble, tile):
                             bubble.direct = bubble.DIRECT_UP
                 elif bubble.direct == bubble.DIRECT_RIGHT:
                     if bubble.state == bubble.STATE_FLY:
@@ -335,8 +337,26 @@ class STAGE:
                             bubble.state = bubble.STATE_NORMAL
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.y + bubble.RADIUS/2 < tile.y and not contact_check_two_object(bubble, tile):
+                        if bubble.y < tile.y and not contact_check_two_object(bubble, tile):
                             bubble.direct = bubble.DIRECT_UP
+
+
+    def contact_check_stage_enemyBubble(self):
+        for enemy in self.enemies:
+            if not enemy.state in (enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED):
+                continue
+            for tile in self.stages:
+                if enemy.direct == enemy.DIRECT_UP:
+                    if enemy.y < tile.y and contact_check_two_object(enemy, tile):
+                        enemy.y = tile.get_bb_bottom() - enemy.YSIZE / 2
+                        if enemy.x < 600:
+                            enemy.direct = enemy.DIRECT_RIGHT
+                        else:
+                            enemy.direct = enemy.DIRECT_LEFT
+                        break
+                elif enemy.direct in(enemy.DIRECT_LEFT, enemy.DIRECT_RIGHT):
+                    if enemy.y < tile.y and not contact_check_two_object(enemy, tile):
+                        enemy.direct = enemy.DIRECT_UP
 
 
 def contact_check_two_object(a, b):

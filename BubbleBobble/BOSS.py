@@ -4,8 +4,7 @@ import random
 
 class BOSS():
     TYPE = 'BOSS'
-    DIRECT_LEFT, DIRECT_RIGHT = 0, 1
-    DIRECT_UP, DIRECT_DOWN = 2, 3
+    DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_WALK, STATE_ANGRY, STATE_DEAD, STATE_AFRAID = 9, 7, 5, None
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = None, None, 3, 1, 99
     PIXEL_PER_METER = (10.0 / 0.3)
@@ -135,6 +134,7 @@ class BOSS():
         if 25 <= self.totalFrame:
             self.frame = self.totalFrame = 0
             self.state = self.STATE_ANGRY
+            self.direct = random.randint(0, 1)
             self.change_actionPerTime()
 
 

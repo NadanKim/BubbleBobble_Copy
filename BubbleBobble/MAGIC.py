@@ -45,10 +45,10 @@ class MAGIC:
 
     def handle_fly(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.RADIUS/2, self.x - self.moveSpeedPPS * self.frameTime)
+            self.x = max(self.RADIUS/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
         else:
-            self.x = min(1200 - self.RADIUS/2, self.x + self.moveSpeedPPS * self.frameTime)
-        if self.x == self.RADIUS/2 or self.x == 1200 - self.RADIUS/2:
+            self.x = min(1200 - self.RADIUS/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+        if self.x == self.RADIUS/2 + 50 or self.x == 1200 - self.RADIUS/2 - 50:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_BOOM
 

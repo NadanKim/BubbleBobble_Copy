@@ -41,6 +41,8 @@ class BUBBLE:
                 return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.bfX + self.RADIUS / 2, self.y + self.RADIUS / 2
             elif self.direct == self.DIRECT_RIGHT:
                 return self.bfX - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
+            else:
+                return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
         else:
             return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
 

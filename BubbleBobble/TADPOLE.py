@@ -3,12 +3,12 @@ import random
 
 class TADPOLE():
     TYPE = 'TADPOLE'
-    DIRECT_LEFT, DIRECT_RIGHT = 0, 1
-    DIRECT_UP, DIRECT_DOWN = 2, 3
+    DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_WALK, STATE_ANGRY, STATE_AFRAID, STATE_DEAD = 15, 13, 11, 9
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = 7, 5, 3, 1, 99
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 20.0
+    FLY_SPEED_KMPH = 15.0
     XSIZE, YSIZE = 50, 70
     sprite = None
 
@@ -16,7 +16,8 @@ class TADPOLE():
         self.stayTime = 6.0
         self.x = x
         self.y = y
-        self.change_moveSpeed()
+        self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
+        self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         self.direct = random.randint(0, 1)
         self.yDirect = random.randint(2, 3)
         self.state = self.STATE_WALK
@@ -32,10 +33,10 @@ class TADPOLE():
         self.change_actionPerTime()
 
 
-    def change_moveSpeed(self):
-        moveSpeedMPM = self.MOVE_SPEED_KMPH * 1000.0 / 60.0
+    def change_moveSpeed(self, MOVE_SPEED_KMPH):
+        moveSpeedMPM = MOVE_SPEED_KMPH * 1000.0 / 60.0
         moveSpeedMPS = moveSpeedMPM / 60.0
-        self.moveSpeedPPS = moveSpeedMPS * self.PIXEL_PER_METER
+        return moveSpeedMPS * self.PIXEL_PER_METER
 
 
     def change_actionPerTime(self):
@@ -49,7 +50,7 @@ class TADPOLE():
 
 
     def get_bb(self):
-        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE * 2 / 5
+        return self.x - self.XSIZE * 2 / 5, self.y - self.YSIZE / 2, self.x + self.XSIZE * 2 / 5, self.y + self.YSIZE /2
 
 
     def get_bb_left(self):
@@ -61,7 +62,7 @@ class TADPOLE():
 
 
     def get_bb_top(self):
-        return self.y + self.YSIZE * 2 / 5
+        return self.y + self.YSIZE /2
 
 
     def get_bb_bottom(self):
@@ -87,12 +88,12 @@ class TADPOLE():
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
             self.y = self.y + self.moveSpeedPPS * self.frameTime
-            if self.YSIZE + 750 < self.y:
-                self.y = -self.YSIZE
+            if 750 < self.y - self.YSIZE:
+                self.y = -self.YSIZE/2
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime
-            if self.y < -self.YSIZE:
-                self.y = 750
+            if self.y + self.YSIZE < 0:
+                self.y = 750 + self.YSIZE/2
 
 
 
@@ -107,12 +108,12 @@ class TADPOLE():
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
             self.y = self.y + self.moveSpeedPPS * self.frameTime * 1.5
-            if self.YSIZE + 750 < self.y:
-                self.y = -self.YSIZE
+            if 750 < self.y - self.YSIZE:
+                self.y = -self.YSIZE/2
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime * 1.5
-            if self.y < -self.YSIZE:
-                self.y = 750
+            if self.y + self.YSIZE < 0:
+                self.y = 750 + self.YSIZE/2
 
 
     def handle_afraid(self):
@@ -126,12 +127,12 @@ class TADPOLE():
                 self.direct = self.DIRECT_LEFT
         if self.yDirect == self.DIRECT_UP:
             self.y = self.y + self.moveSpeedPPS * self.frameTime * 0.5
-            if self.YSIZE + 750 < self.y:
-                self.y = -self.YSIZE
+            if 750 < self.y - self.YSIZE:
+                self.y = -self.YSIZE/2
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime * 0.5
-            if self.y < -self.YSIZE:
-                self.y = 750
+            if self.y + self.YSIZE < 0:
+                self.y = 750 + self.YSIZE/2
 
 
     def handle_dead(self):
@@ -149,6 +150,19 @@ class TADPOLE():
 
 
     def handle_stuck(self):
+        if self.direct == self.DIRECT_UP:
+            self.y += self.flySpeedPPS * self.frameTime
+            if 750 < self.y - self.YSIZE:
+                self.y = -self.YSIZE
+        elif self.direct == self.DIRECT_DOWN:
+            self.y -= self.flySpeedPPS * self.frameTime
+            if self.y + self.YSIZE < 0:
+                self.y = 750 + self.YSIZE
+        elif self.direct == self.DIRECT_LEFT:
+            self.x = max(self.XSIZE/2 + 50, self.x - self.flySpeedPPS * self.frameTime)
+        elif self.direct == self.DIRECT_RIGHT:
+            self.x = min(1200 - self.XSIZE / 2 - 50, self.x + self.flySpeedPPS * self.frameTime)
+
         if self.state == self.STATE_STUCK_GREEN:
             if 80 <= self.totalFrame:
                 self.frame = self.totalFrame = 0
@@ -165,6 +179,7 @@ class TADPOLE():
                     self.state = self.STATE_ANGRY
                 else:
                     self.state = self.STATE_AFRAID
+                self.direct = random.randint(0, 1)
                 self.change_actionPerTime()
 
 
@@ -205,7 +220,7 @@ class TADPOLE():
 
 
     def draw(self):
-        self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * (self.state - self.direct), self.xSprite, self.ySprite, self.x, self.y, self.XSIZE, self.YSIZE)
+        self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * (self.state - (self.direct % 2)), self.xSprite, self.ySprite, self.x, self.y, self.XSIZE, self.YSIZE)
 
 
     def isPop(self):
