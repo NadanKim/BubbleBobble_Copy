@@ -129,6 +129,8 @@ class STAGE:
         #enemy contack stage
         self.contact_check_stage_walker()
         self.contact_check_stage_flying()
+        #enemy attack contact stage
+        self.contack_check_stage_enemyAttack()
 
 
 
@@ -140,7 +142,7 @@ class STAGE:
 
         self.bubbles = []
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(4) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(6) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -178,7 +180,7 @@ class STAGE:
             if self.tileX == 48:
                 self.tileX = 0
                 self.tileY -= 1
-        #if self.currentStage == 6:
+        #if self.currentStage == 7:
          #   self.currentStage = 1
 
 
@@ -357,6 +359,23 @@ class STAGE:
                 elif enemy.direct in(enemy.DIRECT_LEFT, enemy.DIRECT_RIGHT):
                     if enemy.y < tile.y and not contact_check_two_object(enemy, tile):
                         enemy.direct = enemy.DIRECT_UP
+
+
+    def contack_check_stage_enemyAttack(self):
+        for attack in self.attacks:
+            if attack.state in (attack.STATE_BOOM, attack.STATE_NONE):
+                continue
+            for tile in self.stages:
+                if attack.direct == attack.DIRECT_LEFT:
+                    if contact_check_two_object(attack, tile):
+                        attack.x = tile.get_bb_right() + attack.RADIUS / 2
+                        attack.totalFrame = attack.frame = 0
+                        attack.state = attack.STATE_BOOM
+                elif attack.direct == attack.DIRECT_RIGHT:
+                    if contact_check_two_object(attack, tile):
+                        attack.x = tile.get_bb_left() - attack.RADIUS / 2
+                        attack.totalFrame = attack.frame = 0
+                        attack.state = attack.STATE_BOOM
 
 
 def contact_check_two_object(a, b):
