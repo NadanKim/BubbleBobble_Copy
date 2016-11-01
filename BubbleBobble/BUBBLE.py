@@ -19,6 +19,7 @@ class BUBBLE:
         self.bfX = x
         self.first_loc_x = x
         self.direct = direct
+        self.directTemp = direct
         self.attackRange = attackRange
         self.state = self.STATE_FLY
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
@@ -47,6 +48,38 @@ class BUBBLE:
             return self.x - self.RADIUS / 2, self.y - self.RADIUS / 2, self.x + self.RADIUS / 2, self.y + self.RADIUS / 2
 
 
+    def get_bb_left(self):
+        if self.state == self.STATE_FLY:
+            if self.direct == self.DIRECT_LEFT:
+                return self.x - self.RADIUS / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.bfX - self.RADIUS / 2
+            else:
+                return self.x - self.RADIUS / 2
+        else:
+            return self.x - self.RADIUS / 2
+
+
+    def get_bb_bottom(self):
+        return self.y - self.RADIUS / 2
+
+
+    def get_bb_right(self):
+        if self.state == self.STATE_FLY:
+            if self.direct == self.DIRECT_LEFT:
+                return self.bfX + self.RADIUS / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.x + self.RADIUS / 2
+            else:
+                return self.x + self.RADIUS / 2
+        else:
+            return self.x + self.RADIUS / 2
+
+
+    def get_bb_top(self):
+        return self.y + self.RADIUS / 2
+
+
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
@@ -65,9 +98,9 @@ class BUBBLE:
         if self.first_loc_x + self.attackRange + self.moveSpeedPPS * self.frameTime <= self.x or self.x <= self.first_loc_x - self.attackRange - self.moveSpeedPPS * self.frameTime or \
                         self.x == self.RADIUS/2 or self.x == 1200 - self.RADIUS/2:
             if self.direct == self.DIRECT_LEFT:
-                self.x = max(self.RADIUS / 2, self.x + self.moveSpeedPPS * self.frameTime)
+                self.x = max(self.RADIUS / 2 + 50, self.x + self.moveSpeedPPS * self.frameTime)
             else:
-                self.x = min(1200 - self.RADIUS / 2, self.x - self.moveSpeedPPS * self.frameTime)
+                self.x = min(1200 - self.RADIUS / 2 - 50, self.x - self.moveSpeedPPS * self.frameTime)
             self.totalFrame = self.frame = 0
             self.state = self.STATE_NORMAL
             self.direct = self.DIRECT_UP

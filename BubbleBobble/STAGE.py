@@ -133,7 +133,6 @@ class STAGE:
         self.contack_check_stage_enemyAttack()
 
 
-
     def stageMove(self):
         direct = {
             "DIRECT_RIGHT": self.player.DIRECT_RIGHT,
@@ -180,7 +179,7 @@ class STAGE:
             if self.tileX == 48:
                 self.tileX = 0
                 self.tileY -= 1
-        #if self.currentStage == 7:
+        #if self.currentStage == 8:
          #   self.currentStage = 1
 
 
@@ -314,12 +313,9 @@ class STAGE:
                 continue
             for tile in self.stages:
                 if bubble.direct == bubble.DIRECT_UP:
-                    if bubble.y < tile.y and contact_check_two_object(bubble, tile):
+                    if bubble.y < tile.y and bubble.get_bb_left() < tile.x and tile.x < bubble.get_bb_right() and contact_check_two_object(bubble, tile):
                         bubble.y = tile.get_bb_bottom() - bubble.RADIUS / 2
-                        if bubble.x < 600:
-                            bubble.direct = bubble.DIRECT_RIGHT
-                        else:
-                            bubble.direct = bubble.DIRECT_LEFT
+                        bubble.direct = bubble.directTemp
                         break
                 elif bubble.direct == bubble.DIRECT_LEFT:
                     if bubble.state == bubble.STATE_FLY:
@@ -329,7 +325,9 @@ class STAGE:
                             bubble.state = bubble.STATE_NORMAL
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.y < tile.y and not contact_check_two_object(bubble, tile):
+                        if bubble.directTemp != bubble.DIRECT_RIGHT and bubble.x - bubble.RADIUS / 2 <= 50:
+                            bubble.directTemp = bubble.DIRECT_RIGHT
+                        elif bubble.y < tile.y and not contact_check_two_object(bubble, tile):
                             bubble.direct = bubble.DIRECT_UP
                 elif bubble.direct == bubble.DIRECT_RIGHT:
                     if bubble.state == bubble.STATE_FLY:
@@ -339,7 +337,9 @@ class STAGE:
                             bubble.state = bubble.STATE_NORMAL
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.y < tile.y and not contact_check_two_object(bubble, tile):
+                        if bubble.directTemp != bubble.DIRECT_LEFT and 1150 <= bubble.x + bubble.RADIUS / 2:
+                            bubble.directTemp = bubble.DIRECT_LEFT
+                        elif bubble.y < tile.y and not contact_check_two_object(bubble, tile):
                             bubble.direct = bubble.DIRECT_UP
 
 
@@ -349,16 +349,20 @@ class STAGE:
                 continue
             for tile in self.stages:
                 if enemy.direct == enemy.DIRECT_UP:
-                    if enemy.y < tile.y and contact_check_two_object(enemy, tile):
+                    if enemy.y < tile.y and enemy.get_bb_left() < tile.x and tile.x < enemy.get_bb_right() and contact_check_two_object(enemy, tile):
                         enemy.y = tile.get_bb_bottom() - enemy.YSIZE / 2
-                        if enemy.x < 600:
-                            enemy.direct = enemy.DIRECT_RIGHT
-                        else:
-                            enemy.direct = enemy.DIRECT_LEFT
+                        enemy.direct = enemy.directTemp
                         break
-                elif enemy.direct in(enemy.DIRECT_LEFT, enemy.DIRECT_RIGHT):
+                elif enemy.direct == enemy.DIRECT_LEFT:
+                    if enemy.directTemp != enemy.DIRECT_RIGHT and enemy.x - enemy.XSIZE / 2 <= 50:
+                        enemy.directTemp = enemy.DIRECT_RIGHT
+                    elif enemy.y < tile.y and not contact_check_two_object(enemy, tile):
+                        enemy.direct = enemy.DIRECT_UP
+                elif enemy.direct == enemy.DIRECT_RIGHT:
                     if enemy.y < tile.y and not contact_check_two_object(enemy, tile):
                         enemy.direct = enemy.DIRECT_UP
+                    if enemy.directTemp != enemy.DIRECT_LEFT and 1150 <= enemy.x + enemy.XSIZE / 2:
+                        enemy.directTemp = enemy.DIRECT_LEFT
 
 
     def contack_check_stage_enemyAttack(self):

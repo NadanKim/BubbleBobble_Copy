@@ -21,6 +21,7 @@ class PULPUL():
         self.moveYSpeedPPS = self.change_moveSpeed(self.MOVEY_SPEED_KMPH)
         self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         self.direct = random.randint(0, 1)
+        self.directTemp = self.direct
         self.yDirect = random.randint(2, 3)
         self.state = self.STATE_WALK
         self.frame, self.totalFrame = 0, 0

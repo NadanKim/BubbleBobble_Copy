@@ -26,6 +26,7 @@ class MAGICIAN():
         self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         self.jumpSpeedPPS = self.moveSpeedPPS
         self.direct = random.randint(0, 1)
+        self.directTemp = self.direct
         self.stateTemp = self.state = self.STATE_WALK
         self.frame, self.totalFrame = 0, 0
         self.actionPerTime = 0.0
