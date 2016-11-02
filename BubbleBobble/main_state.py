@@ -69,6 +69,8 @@ def draw():
         bubble.draw()
     for attack in stage.attacks:
         attack.draw()
+    for item in stage.items:
+        item.draw()
     stage.warp.draw()
     stage.player.draw()
 
@@ -102,3 +104,5 @@ def draw_bb():
         attack.draw_bb()
     for tile in stage.stages:
         tile.draw_bb()
+    for item in stage.items:
+        item.draw_bb()

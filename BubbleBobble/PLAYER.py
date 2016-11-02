@@ -4,14 +4,15 @@ import math
 
 class PLAYER():
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
-    ATTACK_RANGE_MIN, ATTACK_RANGE_MAX, ATTACK_RANGE_CHANGE = 300, 450, 30
-    JUMP_MAX, JUMP_MIN, JUMP_CHANGE = 160, 120, 10
-    ATTACK_TERM_MAX, ATTACK_TERM_MIN, ATTACK_TERM_CHANGE = 8, 4, 1
+    ATTACK_RANGE_MIN, ATTACK_RANGE_MAX = 300, 450
+    JUMP_MIN = 120
+    ATTACK_TERM_MAX, ATTACK_TERM_MIN = 8, 4
     STATE_STAY, STATE_MOVE, STATE_DEAD, STATE_ATTACK = 11, 9, 7, 5
     STATE_JUMP, STATE_DOWN, STATE_BURN, STATE_STAGEMOVE = 3, 1, 13, 14
     FIRST_LOC_X, FIRST_LOC_Y = 400, 300
     PIXEL_PER_METER = (10.0 / 0.3)
-    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH, SPEED_CHANGE = 20.0, 30.0, 2.0
+    MIN_MOVE_SPEED_KMPH, MAX_MOVE_SPEED_KMPH = 20.0, 35.0
+    JUMP_SPEED_KMPH = 30.0
     XSIZE, YSIZE = 50, 70
     sprite = None
     stageMove = None
@@ -24,7 +25,7 @@ class PLAYER():
         self.bfY = self.y
         self.currentSpeedKMPH = self.MIN_MOVE_SPEED_KMPH
         self.moveSpeedPPS = self.change_moveSpeed(self.currentSpeedKMPH)
-        self.jumpSpeedPPS = self.change_moveSpeed(self.MAX_MOVE_SPEED_KMPH)
+        self.jumpSpeedPPS = self.change_moveSpeed(self.JUMP_SPEED_KMPH)
         self.direct = self.DIRECT_RIGHT
         self.stateTemp = self.state = self.STATE_STAY
         self.frame, self.totalFrame = 0, 0
@@ -36,6 +37,7 @@ class PLAYER():
         self.jumpPoint = 0
         self.spriteCount = 0
         self.bubble = False
+        self.score = 0
 
         self.currentAttackTerm = self.ATTACK_TERM_MAX
         self.couldAttack = 0 #0 then attack possible and one attack then add currentAttackTerm

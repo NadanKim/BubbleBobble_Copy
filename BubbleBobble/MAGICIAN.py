@@ -171,7 +171,7 @@ class MAGICIAN():
         self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
         if self.y < -self.YSIZE:
-            self.y = 750
+            self.y = 700
 
 
     def handle_stuck(self):

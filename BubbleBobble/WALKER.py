@@ -1,6 +1,7 @@
 from pico2d import *
 import random
 
+
 class WALKER():
     TYPE = 'WALKER'
     DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
@@ -200,7 +201,7 @@ class WALKER():
         self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
         if self.y < -self.YSIZE:
-            self.y = 750
+            self.y = 700
 
 
     handle_state = {

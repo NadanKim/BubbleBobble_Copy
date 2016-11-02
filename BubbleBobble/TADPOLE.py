@@ -94,7 +94,7 @@ class TADPOLE():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime
             if self.y + self.YSIZE < 0:
-                self.y = 750 + self.YSIZE/2
+                self.y = 700
 
 
 
@@ -114,7 +114,7 @@ class TADPOLE():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime * 1.5
             if self.y + self.YSIZE < 0:
-                self.y = 750 + self.YSIZE/2
+                self.y = 700
 
 
     def handle_afraid(self):
@@ -133,7 +133,7 @@ class TADPOLE():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveSpeedPPS * self.frameTime * 0.5
             if self.y + self.YSIZE < 0:
-                self.y = 750 + self.YSIZE/2
+                self.y = 700
 
 
     def handle_dead(self):

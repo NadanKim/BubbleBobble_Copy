@@ -92,7 +92,7 @@ class PULPUL():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveYSpeedPPS * self.frameTime
             if self.y + self.YSIZE < 0:
-                self.y = 750
+                self.y = 700
 
 
 
@@ -112,7 +112,7 @@ class PULPUL():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveYSpeedPPS * self.frameTime * 1.5
             if self.y + self.YSIZE < 0:
-                self.y = 750
+                self.y = 700
 
 
     def handle_afraid(self):
@@ -131,7 +131,7 @@ class PULPUL():
         elif self.yDirect == self.DIRECT_DOWN:
             self.y = self.y - self.moveYSpeedPPS * self.frameTime * 0.5
             if self.y + self.YSIZE < 0:
-                self.y = 750
+                self.y = 700
 
 
     def handle_dead(self):

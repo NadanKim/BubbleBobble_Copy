@@ -9,6 +9,7 @@ from TILE import TILE
 import random
 from pico2d import *
 import json
+from ITEM import ITEM
 
 class STAGE:
     background = None
@@ -27,6 +28,7 @@ class STAGE:
         self.attacks = []
         self.tiles = []
         self.stages = []
+        self.items = []
         if self.background == None:
             self.background = load_image("sprite\\surround\\background.png")
         if self.bigTile == None:
@@ -41,6 +43,7 @@ class STAGE:
             self.bubbles.append(bubble)
         for enemy in self.enemies:
             if enemy.isPop():
+                self.items.append(ITEM(enemy.x, enemy.y))
                 self.enemies.remove(enemy)
             else:
                 attack = enemy.update(frame_time)
@@ -56,6 +59,10 @@ class STAGE:
                 self.attacks.remove(attack)
             else:
                 attack.update(frame_time)
+        for item in self.items:
+            item.update(frame_time)
+            if item.state == item.STATE_NONE:
+                self.items.remove(item)
 
 
         self.warp.update()
@@ -93,6 +100,7 @@ class STAGE:
                 elif enemy.TYPE == 'BOSS' and contact_check_two_object(self.bubbles[-1], enemy):
                     self.bubbles[-1].frame = 0
                     self.bubbles[-1].state = self.bubbles[-1].STATE_PON
+                    self.player.score += 20
                     break
         #enemy's attack check
         if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
@@ -110,6 +118,7 @@ class STAGE:
                         enemy.frame = enemy.totalFrame = 0
                         enemy.state = enemy.STATE_DEAD
                         enemy.change_actionPerTime()
+                        self.player.score += 100
             for attack in self.attacks:
                 if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
@@ -124,6 +133,7 @@ class STAGE:
             if contact_check_two_object(bubble, self.player):
                 bubble.totalFrame = 0.0
                 bubble.state = bubble.STATE_PON
+                self.player.score += 20
         #player contack stage
         self.contact_check_stage_player()
         #enemy contack stage
@@ -131,6 +141,11 @@ class STAGE:
         self.contact_check_stage_flying()
         #enemy attack contact stage
         self.contack_check_stage_enemyAttack()
+        #player and item contact check
+        if self.player.state not in (self.player.STATE_DEAD, self.player.STATE_STAGEMOVE, self.player.STATE_BURN):
+            self.contact_check_player_item()
+        #item and stage contact
+        self.contact_check_stage_item()
 
 
     def stageMove(self):
@@ -140,8 +155,9 @@ class STAGE:
         }
 
         self.bubbles = []
+        self.items = []
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(6) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(5) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -380,6 +396,35 @@ class STAGE:
                         attack.x = tile.get_bb_left() - attack.RADIUS / 2
                         attack.totalFrame = attack.frame = 0
                         attack.state = attack.STATE_BOOM
+
+
+    def contact_check_stage_item(self):
+        for item in self.items:
+            for tile in self.stages:
+                if item.direct == item.DIRECT_DOWN:
+                    if tile.y < item.y and item.get_bb_left() < tile.x and tile.x < item.get_bb_right() and contact_check_two_object(item, tile):
+                        item.y = tile.get_bb_top() + item.YSIZE / 2
+                        item.direct = item.DIRECT_STAY
+                        break
+
+
+    def contact_check_player_item(self):
+        for item in self.items:
+            if item == item.STATE_NONE:
+                continue
+            if contact_check_two_object(self.player, item):
+                item.state = item.STATE_FONT
+                item.direct = item.DIRECT_STAY
+                self.player.score += item.score
+                if item.itemNumber == item.KIND_RUN:
+                    self.player.currentSpeedKMPH = self.player.MAX_MOVE_SPEED_KMPH
+                    self.player.moveSpeedPPS = self.player.change_moveSpeed(self.player.currentSpeedKMPH)
+                elif item.itemNumber == item.KIND_LONG:
+                    self.player.attackRange = self.player.ATTACK_RANGE_MAX
+                elif item.itemNumber == item.KIND_FAST:
+                    self.player.currentAttackTerm = self.player.ATTACK_TERM_MIN
+                elif item.itemNumber == item.KIND_THUNDER:
+                    pass
 
 
 def contact_check_two_object(a, b):
