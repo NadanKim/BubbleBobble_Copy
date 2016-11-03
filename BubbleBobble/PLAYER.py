@@ -22,6 +22,7 @@ class PLAYER():
         self.noDieTime = 0.0
         self.x = self.FIRST_LOC_X
         self.y = self.FIRST_LOC_Y
+        self.playerHealth = 3
         self.bfY = self.y
         self.currentSpeedKMPH = self.MIN_MOVE_SPEED_KMPH
         self.moveSpeedPPS = self.change_moveSpeed(self.currentSpeedKMPH)
@@ -198,7 +199,7 @@ class PLAYER():
         self.bfY = self.y
         self.y -= self.jumpSpeedPPS * self.frameTime
         if self.y < -self.YSIZE:
-            self.y = 750
+            self.y = 700
 
 
     def handle_burn(self):
@@ -231,7 +232,7 @@ class PLAYER():
             self.jumpHeight = self.JUMP_MIN
             self.attackRange = self.ATTACK_RANGE_MIN
             self.change_actionPerTime()
-            self.noDieTime = 50.0
+            self.noDieTime = 25.0
             self.noDie = True
 
 

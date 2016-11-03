@@ -15,13 +15,17 @@ class STAGE:
     background = None
     bigTile = None
     smallTile = None
+    font = None
+    itemSprite = None
+    playerHealth = None
     def __init__(self):
-        self.currentStage = 1
+        self.currentStage = 0
         self.stageMoveCount = 0.0
         self.stageSize = 25
         self.tileSize = 12.5
         self.tileX, tileY = 0, 0
         self.player = PLAYER()
+        self.player.playerHealth = 3
         self.warp = WARP()
         self.bubbles = []
         self.enemies = []
@@ -29,12 +33,25 @@ class STAGE:
         self.tiles = []
         self.stages = []
         self.items = []
-        if self.background == None:
-            self.background = load_image("sprite\\surround\\background.png")
-        if self.bigTile == None:
-            self.bigTile = load_image("sprite\\MapTile\\BIGTILE.png")
-        if self.smallTile == None:
-            self.smallTile = load_image("sprite\\MapTile\\SMALLTILE.png")
+        self.checkItems = []
+        for i in range(4):
+            self.checkItems.append(ITEM(100, 100))
+        for i in range(4):
+            self.checkItems[i].itemNumber = 11 + i
+            self.checkItems[i].x = 1150 - i * 70
+            self.checkItems[i].y = 750
+        if STAGE.background == None:
+            STAGE.background = load_image("sprite\\surround\\background.png")
+        if STAGE.bigTile == None:
+            STAGE.bigTile = load_image("sprite\\MapTile\\BIGTILE.png")
+        if STAGE.smallTile == None:
+            STAGE.smallTile = load_image("sprite\\MapTile\\SMALLTILE.png")
+        if STAGE.font == None:
+            STAGE.font = Font('sprite\\surround\\Pixel.ttf', 30)
+        if STAGE.itemSprite == None:
+            STAGE.itemSprite = load_image('sprite\\Item\\item_use.png')
+        if STAGE.playerHealth == None:
+            STAGE.playerHealth = load_image('sprite\\Item\\health.png')
         self.stageData = None
 
     def update(self, frame_time):
@@ -81,6 +98,21 @@ class STAGE:
         self.background.draw(600, 400)
         for tile in self.stages:
             tile.draw()
+        self.background.draw(600, 750, 1200, 100)
+        self.font.draw(480, 770, "HIGH SCORE", (255, 30, 30))
+        self.font.draw(80, 770, "PLAYER", (40, 255, 40))
+        self.font.draw(210 - (len(str(self.player.score))-1)*25, 730, str(self.player.score), (255, 255, 255))
+        self.font.draw(1130, 20, str(self.currentStage), (255, 255, 255))
+
+        if self.player.currentSpeedKMPH == self.player.MAX_MOVE_SPEED_KMPH:
+            self.checkItems[0].draw()
+        if self.player.attackRange == self.player.ATTACK_RANGE_MAX:
+            self.checkItems[1].draw()
+        if self.player.currentAttackTerm == self.player.ATTACK_TERM_MIN:
+            self.checkItems[2].draw()
+
+        for i in range(self.player.playerHealth):
+            self.playerHealth.draw(20+i*25, 10, 20, 20)
 
 
     def contact_check(self):
@@ -110,6 +142,7 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
+                        self.player.playerHealth -= 1
                         self.player.change_actionPerTime()
                 #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
@@ -124,6 +157,7 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
+                        self.player.playerHealth -= 1
                         self.player.change_actionPerTime()
         #bubble contack player
         for bubble in self.bubbles:
@@ -156,6 +190,9 @@ class STAGE:
 
         self.bubbles = []
         self.items = []
+        self.currentStage += 1
+        # if self.currentStage == 8:
+        #   self.currentStage = 1
         #get stage data file
         fileDirection = 'Stage\\stage' + str(5) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
@@ -168,7 +205,6 @@ class STAGE:
         self.player.totalFrame = self.player.frame = 0
         self.player.state = self.player.STATE_STAGEMOVE
         self.player.change_actionPerTime()
-        self.currentStage += 1
         self.tileX, self.tileY = 0, 31
         #Summon enemy
         enemyCount = 0
@@ -195,12 +231,6 @@ class STAGE:
             if self.tileX == 48:
                 self.tileX = 0
                 self.tileY -= 1
-        #if self.currentStage == 8:
-         #   self.currentStage = 1
-
-
-    def bubble_pon_together(self):
-        pass
 
 
     def contact_check_stage_player(self):
@@ -209,15 +239,15 @@ class STAGE:
                     and not self.player.state == self.player.STATE_STAGEMOVE:
                 # check left or right tile
                 if self.player.jumpPoint == 1:
-                    if self.player.get_bb_left() < tile.x and tile.x < self.player.get_bb_right():
+                    if self.player.get_bb_left() < tile.x and tile.x < self.player.get_bb_right() :
                         continue
                 if self.player.state == self.player.STATE_MOVE or self.player.stateTemp == self.player.STATE_MOVE:
-                    if self.player.direct == self.player.DIRECT_LEFT:
+                    if self.player.direct == self.player.DIRECT_LEFT and not 675 <= tile.y:
                         if tile.get_bb_bottom() < self.player.y and self.player.y < tile.get_bb_top():
                             if tile.get_bb_left() < self.player.get_bb_left() and self.player.get_bb_left() < tile.get_bb_right():
                                 self.player.x = tile.get_bb_right() + self.player.XSIZE / 2
                                 break
-                    elif self.player.direct == self.player.DIRECT_RIGHT:
+                    elif self.player.direct == self.player.DIRECT_RIGHT and not 675 <= tile.y:
                         if tile.get_bb_bottom() < self.player.y and self.player.y < tile.get_bb_top():
                             if tile.get_bb_left() < self.player.get_bb_right() and self.player.get_bb_right() < tile.get_bb_right():
                                 self.player.x = tile.get_bb_left() - self.player.XSIZE / 2
@@ -226,7 +256,7 @@ class STAGE:
         for tile in self.stages:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN \
                     and not self.player.state == self.player.STATE_STAGEMOVE:
-                if not self.player.jumpPoint == 1 and tile.y < self.player.bfY - self.player.YSIZE / 2 and contact_check_two_object(
+                if not self.player.jumpPoint == 1 and tile.y < self.player.bfY - self.player.YSIZE / 2 and not 675 <= tile.y and contact_check_two_object(
                         self.player, tile):
                     changed = True
                     self.player.y = self.player.YSIZE / 2 + tile.get_bb_y()
@@ -267,7 +297,7 @@ class STAGE:
             changed = False
             for tile in self.stages:
                 if not enemy.state == enemy.STATE_DEAD:
-                    if enemy.state == enemy.STATE_DOWN and tile.y < enemy.bfY - enemy.YSIZE / 2 and contact_check_two_object(enemy, tile):
+                    if enemy.state == enemy.STATE_DOWN and tile.y < enemy.bfY - enemy.YSIZE / 2 and not 675<=tile.y and contact_check_two_object(enemy, tile):
                         changed = True
                         enemy.y = enemy.YSIZE / 2 + tile.get_bb_y()
                         if enemy.state == enemy.STATE_DOWN:
@@ -410,13 +440,15 @@ class STAGE:
 
     def contact_check_player_item(self):
         for item in self.items:
-            if item == item.STATE_NONE:
+            if item.state in(item.STATE_NONE, item.STATE_FONT):
                 continue
             if contact_check_two_object(self.player, item):
                 item.state = item.STATE_FONT
                 item.direct = item.DIRECT_STAY
                 self.player.score += item.score
-                if item.itemNumber == item.KIND_RUN:
+                if item.itemNumber == item.KIND_HEALTH:
+                    self.player.playerHealth += 1
+                elif item.itemNumber == item.KIND_RUN:
                     self.player.currentSpeedKMPH = self.player.MAX_MOVE_SPEED_KMPH
                     self.player.moveSpeedPPS = self.player.change_moveSpeed(self.player.currentSpeedKMPH)
                 elif item.itemNumber == item.KIND_LONG:
