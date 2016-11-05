@@ -134,9 +134,6 @@ class PLAYER():
                     self.state = self.STATE_JUMP
                     self.yAtJump = self.y
                     self.jumpPoint = 1
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
-                self.frame, self.totalFrame = 0, 0
-                self.state = self.STATE_STAGEMOVE
 
             elif (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT) and self.direct == self.DIRECT_LEFT:
                 if self.jumpPoint == 0:

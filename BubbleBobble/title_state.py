@@ -1,6 +1,7 @@
 import game_framework
 from pico2d import *
 import main_state
+import ranking_state
 
 
 name = "TitleState"
@@ -34,19 +35,19 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
-            if select == 150:
-                select = 250
-            elif select == 250:
-                select = 150
+            select+=100
+            if 250<select:
+                select = 50
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
-            if select == 250:
-                select = 150
-            elif select == 150:
+            select -= 100
+            if select < 50:
                 select = 250
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
             if select == 250:
                 game_framework.change_state(main_state)
-            else:
+            elif select == 150:
+                game_framework.change_state(ranking_state)
+            elif select == 50:
                 game_framework.quit()
 
 
@@ -55,7 +56,8 @@ def draw():
     background.draw(600, 400)
     title.clip_draw(178*frame, 0, 178, 144, 700, 500, 500, 400)
     font.draw(600, 250, "GAME START", (255, 255, 255))
-    font.draw(600, 150, "EXIT", (255, 255, 255))
+    font.draw(600, 150, "RANKING", (255, 255, 255))
+    font.draw(600, 50, "EXIT", (255, 255, 255))
     font.draw(540, select, ">>", (255, 255, 255))
     update_canvas()
 

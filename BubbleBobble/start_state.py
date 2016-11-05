@@ -16,6 +16,7 @@ def enter():
 def exit():
     global image
     del(image)
+    image = None
 
 
 def update():
@@ -38,7 +39,9 @@ def draw():
 
 def handle_events():
     events = get_events()
-    pass
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
 
 
 def pause(): pass

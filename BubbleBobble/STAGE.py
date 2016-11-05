@@ -53,6 +53,10 @@ class STAGE:
         if STAGE.playerHealth == None:
             STAGE.playerHealth = load_image('sprite\\Item\\health.png')
         self.stageData = None
+        file = open('gameData\\ranking_data.txt', 'r')
+        data = json.load(file)
+        self.highScore = data[0]['score']
+        file.close()
 
     def update(self, frame_time):
         bubble = self.player.update(frame_time)
@@ -100,6 +104,10 @@ class STAGE:
             tile.draw()
         self.background.draw(600, 750, 1200, 100)
         self.font.draw(480, 770, "HIGH SCORE", (255, 30, 30))
+        if self.player.score < self.highScore:
+            self.font.draw(530, 730, str(self.highScore), (255, 255, 255))
+        else:
+            self.font.draw(530, 730, str(self.player.score), (255, 255, 255))
         self.font.draw(80, 770, "PLAYER", (40, 255, 40))
         self.font.draw(210 - (len(str(self.player.score))-1)*25, 730, str(self.player.score), (255, 255, 255))
         self.font.draw(1130, 20, str(self.currentStage), (255, 255, 255))
