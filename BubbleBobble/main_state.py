@@ -12,13 +12,14 @@ draw_box = False
 font = None
 select = 0
 current_time = get_time()
+YES_BUTTON, NO_BUTTON = 420, 840
 
 def enter():
     global stage, background, font, select
     background = load_image("sprite\\surround\\titleBackground.png")
     font = load_font('sprite\\surround\\Pixel.ttf', 70)
     stage = STAGE()
-    select = 420
+    select = YES_BUTTON
 
 
 def exit():
@@ -63,20 +64,22 @@ def handle_events():
                 draw_box = True
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
             special_key = False
-        elif stage.player.playerHealth < 0:
+        elif stage.player.playerHealth < 3:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-                if select == 420:
-                    select = 840
+                if select == YES_BUTTON:
+                    select = NO_BUTTON
                 else:
-                    select = 420
+                    select = YES_BUTTON
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-                if select == 840:
-                    select = 420
+                if select == NO_BUTTON:
+                    select = YES_BUTTON
                 else:
-                    select = 840
+                    select = NO_BUTTON
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
-                if select == 420:
+                if select == YES_BUTTON:
                     stage.player.playerHealth = 3
+                    stage.player.noDieTime = 25.0
+                    stage.player.noDie = True
                 else:
                     game_framework.change_state(ranking_state)
         else:
@@ -93,7 +96,7 @@ def get_frame_time():
 def draw():
     clear_canvas()
 
-    if 0 <= stage.player.playerHealth:
+    if 3 <= stage.player.playerHealth:
         stage.draw()
         for enemy in stage.enemies:
             enemy.draw()

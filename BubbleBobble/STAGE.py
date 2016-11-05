@@ -150,7 +150,6 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
-                        self.player.playerHealth -= 1
                         self.player.change_actionPerTime()
                 #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
@@ -165,7 +164,6 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
-                        self.player.playerHealth -= 1
                         self.player.change_actionPerTime()
         #bubble contack player
         for bubble in self.bubbles:

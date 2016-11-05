@@ -229,6 +229,7 @@ class PLAYER():
             self.jumpHeight = self.JUMP_MIN
             self.attackRange = self.ATTACK_RANGE_MIN
             self.change_actionPerTime()
+            self.playerHealth -= 1
             self.noDieTime = 25.0
             self.noDie = True
 

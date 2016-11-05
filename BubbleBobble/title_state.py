@@ -11,6 +11,7 @@ font = None
 logo_time = 0.0
 frame = 0
 select = 250
+START_BUTTON, RANKING_BUTTON, EXIT_BUTTON =  250, 150, 50
 
 
 def enter():
@@ -35,19 +36,19 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
-            select+=100
-            if 250<select:
-                select = 50
+            select += 100
+            if START_BUTTON<select:
+                select = EXIT_BUTTON
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
             select -= 100
-            if select < 50:
-                select = 250
+            if select < EXIT_BUTTON:
+                select = START_BUTTON
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
-            if select == 250:
+            if select == START_BUTTON:
                 game_framework.change_state(main_state)
-            elif select == 150:
+            elif select == RANKING_BUTTON:
                 game_framework.change_state(ranking_state)
-            elif select == 50:
+            elif select == EXIT_BUTTON:
                 game_framework.quit()
 
 
@@ -55,9 +56,9 @@ def draw():
     clear_canvas()
     background.draw(600, 400)
     title.clip_draw(178*frame, 0, 178, 144, 700, 500, 500, 400)
-    font.draw(600, 250, "GAME START", (255, 255, 255))
-    font.draw(600, 150, "RANKING", (255, 255, 255))
-    font.draw(600, 50, "EXIT", (255, 255, 255))
+    font.draw(600, START_BUTTON, "GAME START", (255, 255, 255))
+    font.draw(600, RANKING_BUTTON, "RANKING", (255, 255, 255))
+    font.draw(600, EXIT_BUTTON, "EXIT", (255, 255, 255))
     font.draw(540, select, ">>", (255, 255, 255))
     update_canvas()
 
