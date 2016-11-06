@@ -2,7 +2,7 @@ from pico2d import *
 
 class MAGIC:
     sprite = None
-
+    TYPE = 'MAGIC'
     RADIUS = 50
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 40.0

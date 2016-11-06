@@ -189,6 +189,9 @@ class WALKER():
         self.y += self.jumpSpeedPPS * self.frameTime
         if self.JUMP_HEIGHT <= self.y - self.yAtJump:
             self.state = self.STATE_DOWN
+        if 675 < self.y - self.YSIZE / 2:
+            self.y = self.YSIZE / 2
+            self.state = self.STATE_DOWN
 
 
     def handle_down(self):

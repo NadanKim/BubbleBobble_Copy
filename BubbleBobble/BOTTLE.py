@@ -2,7 +2,7 @@ from pico2d import *
 
 class BOTTLE:
     sprite = None
-
+    TYPE = 'BOTTLE'
     RADIUS = 50
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 40.0
@@ -39,7 +39,8 @@ class BOTTLE:
 
 
     def draw(self):
-        self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * (self.state - self.direct), self.xSprite, self.ySprite, self.x, self.y, self.RADIUS, self.RADIUS)
+        if self.state == self.STATE_FLY:
+            self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * (self.state - self.direct), self.xSprite, self.ySprite, self.x, self.y, self.RADIUS, self.RADIUS)
 
 
     def handle_fly(self):

@@ -10,13 +10,15 @@ background = None
 special_key = False
 draw_box = False
 font = None
+pause = False
 select = 0
 current_time = get_time()
 YES_BUTTON, NO_BUTTON = 420, 840
 
 def enter():
-    global stage, background, font, select
-    background = load_image("sprite\\surround\\titleBackground.png")
+    global stage, background, font, select, pause
+    pause = False
+    background = load_image("sprite\\surround\\pauseBackground.png")
     font = load_font('sprite\\surround\\Pixel.ttf', 70)
     stage = STAGE()
     select = YES_BUTTON
@@ -35,15 +37,13 @@ def exit():
 
 
 def handle_events():
-    global draw_box, special_key, stage, select
+    global draw_box, special_key, stage, select, pause
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.change_state(ranking_state)
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
-            pass #PAUSE 구현
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE): # pause
+            pause = not pause
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
             special_key = True
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F10):    #no Die Ctrl F10
@@ -64,7 +64,7 @@ def handle_events():
                 draw_box = True
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
             special_key = False
-        elif stage.player.playerHealth < 3:
+        elif stage.player.playerHealth < 0 or pause == True:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
                 if select == YES_BUTTON:
                     select = NO_BUTTON
@@ -77,9 +77,12 @@ def handle_events():
                     select = NO_BUTTON
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
                 if select == YES_BUTTON:
-                    stage.player.playerHealth = 3
-                    stage.player.noDieTime = 25.0
-                    stage.player.noDie = True
+                    if pause == True:
+                        pause = False
+                    else:
+                        stage.player.playerHealth = 3
+                        stage.player.noDieTime = 25.0
+                        stage.player.noDie = True
                 else:
                     game_framework.change_state(ranking_state)
         else:
@@ -96,22 +99,22 @@ def get_frame_time():
 def draw():
     clear_canvas()
 
-    if 3 <= stage.player.playerHealth:
-        stage.draw()
-        for enemy in stage.enemies:
-            enemy.draw()
-        for bubble in stage.bubbles:
-            bubble.draw()
-        for attack in stage.attacks:
-            attack.draw()
-        for item in stage.items:
-            item.draw()
-        stage.warp.draw()
-        stage.player.draw()
+    stage.draw()
+    for bubble in stage.bubbles:
+        bubble.draw()
+    for attack in stage.attacks:
+        attack.draw()
+    for item in stage.items:
+        item.draw()
+    for enemy in stage.enemies:
+        enemy.draw()
+    stage.warp.draw()
+    stage.player.draw()
 
-        if draw_box == True:
-            draw_bb()
-    else:
+    if draw_box == True:
+        draw_bb()
+
+    if stage.player.playerHealth < 0 or pause == True:
         background.draw(600, 400)
         font.draw(500, 600, "CONTINUE??", (255, 255, 40))
         font.draw(500, 400, "YES    /   NO", (255, 255, 255))
@@ -123,7 +126,7 @@ def draw():
 def update():
     delay(0.05)
     frame_time = get_frame_time()
-    if 0 <= stage.player.playerHealth:
+    if 0 <= stage.player.playerHealth and pause == False:
         stage.update(frame_time)
 
 

@@ -11,7 +11,7 @@ class ITEM:
     DIRECT_DOWN, DIRECT_STAY = 0, 1
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 15.0
-    def __init__(self, x, y):
+    def __init__(self, x, y, kind=None):
         x = max(50 + self.XSIZE, x)
         x = min(1150 - self.XSIZE, x)
         y = min(750 - self.YSIZE, y)
@@ -20,8 +20,12 @@ class ITEM:
         self.state = self.STATE_SET
         self.direct = self.DIRECT_DOWN
         self.spriteSize = 16
+        self.rewindTime = 0.0
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
-        self.itemNumber = random.randint(0, 13)
+        if kind == None:
+            self.itemNumber = random.randint(0, 13)
+        else:
+            self.itemNumber = kind
         self.score = self.POINT[self.itemNumber]
         if ITEM.sprite == None:
             ITEM.sprite = load_image('sprite\\Item\\item_use.png')
@@ -77,3 +81,10 @@ class ITEM:
             self.y += 2
             if 0.7 < self.fontTime:
                 self.state = self.STATE_NONE
+                self.fontTime = 0.0
+        elif self.state == self.STATE_NONE:
+            self.rewindTime += frameTime
+            if 5.5 < self.rewindTime:
+                self.state = self.STATE_SET
+                self.direct = self.DIRECT_DOWN
+                self.rewindTime = 0.0

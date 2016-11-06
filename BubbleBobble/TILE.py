@@ -14,13 +14,13 @@ class TILE:
 
         if 0 < tileNumber and tileNumber <= 100:
             self.left = (tileNumber - 1) % 10 * self.stageSize * 2
-            self.bottom = int(9 - (tileNumber - tileNumber % 10) / 10) * self.stageSize * 2
+            self.bottom = int(9 - ((tileNumber - 1) - (tileNumber - 1) % 10) / 10) * self.stageSize * 2
             self.size = self.stageSize * 2
             self.x = self.tileSize * 2 + tileX * self.stageSize
             self.y = self.tileSize * 2 + tileY * self.stageSize
         elif 100 < tileNumber and tileNumber <=200:
             self.left = (tileNumber - 101) % 10 * self.stageSize
-            self.bottom = int(9 - ((tileNumber-100) - (tileNumber-100) % 10) / 10) * self.stageSize
+            self.bottom = int(9 - ((tileNumber-101) - (tileNumber-101) % 10) / 10) * self.stageSize
             self.size = self.stageSize
             self.x = self.tileSize + tileX * self.stageSize
             self.y = self.tileSize + tileY * self.stageSize

@@ -85,12 +85,12 @@ class BOSS():
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(700 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
-            if self.y == 700 - self.YSIZE / 2:
+            self.y = min(675 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
+            if self.y == 675 - self.YSIZE / 2:
                 self.yDirect = self.DIRECT_DOWN
         elif self.yDirect == self.DIRECT_DOWN:
-            self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime)
-            if self.y == self.YSIZE / 2:
+            self.y = max(self.YSIZE / 2 + 25, self.y - self.moveSpeedPPS * self.frameTime)
+            if self.y == self.YSIZE / 2 + 25:
                 self.yDirect = self.DIRECT_UP
 
 
@@ -107,12 +107,12 @@ class BOSS():
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
         if self.yDirect == self.DIRECT_UP:
-            self.y = min(800 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.y == 800 - self.YSIZE / 2:
+            self.y = min(675 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.y == 675 - self.YSIZE / 2:
                 self.yDirect = self.DIRECT_DOWN
         elif self.yDirect == self.DIRECT_DOWN:
-            self.y = max(self.YSIZE / 2, self.y - self.moveSpeedPPS * self.frameTime * 1.5)
-            if self.y == self.YSIZE / 2:
+            self.y = max(self.YSIZE / 2 + 25, self.y - self.moveSpeedPPS * self.frameTime * 1.5)
+            if self.y == self.YSIZE / 2 + 25:
                 self.yDirect = self.DIRECT_UP
 
 
@@ -170,12 +170,12 @@ class BOSS():
             if self.stayTime < 0:
                 self.stayTime = 0
         # make attack
-        if not self.isAttack == 0:
+        if 0 < self.isAttack:
             self.isAttack -= 1
             if self.direct == self.DIRECT_LEFT:
-                return BOTTLE(self.x - self.XSIZE / 2, self.y, (-1)**self.isAttack * (self.isAttack/4), self.direct)
+                return BOTTLE(self.x - self.XSIZE / 2, self.y, ((-1)**self.isAttack) * (self.isAttack/4), self.direct)
             else:
-                return BOTTLE(self.x + self.XSIZE / 2, self.y, (-1)**self.isAttack * (self.isAttack/4), self.direct)
+                return BOTTLE(self.x + self.XSIZE / 2, self.y, ((-1)**self.isAttack) * (self.isAttack/4), self.direct)
 
 
     def draw(self):
