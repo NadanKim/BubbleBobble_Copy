@@ -34,6 +34,7 @@ class STAGE:
         self.stages = []
         self.items = []
         self.checkItems = []
+        self.effects = []
         for i in range(4):
             self.checkItems.append(ITEM(100, 100))
         for i in range(4):
@@ -74,7 +75,9 @@ class STAGE:
             if bubble.isPop():
                 self.bubbles.remove(bubble)
             else:
-                bubble.update(frame_time)
+                effect = bubble.update(frame_time)
+                if not effect == None:
+                    self.effects.append(effect)
         for attack in self.attacks:
             if attack.isPop():
                 self.attacks.remove(attack)
@@ -84,6 +87,12 @@ class STAGE:
             item.update(frame_time)
             if item.state == item.STATE_NONE and item.itemNumber != item.KIND_THUNDER:
                 self.items.remove(item)
+        for effect in self.effects:
+            if effect.isPop():
+                self.effects.remove(effect)
+            else:
+                effect.update(frame_time)
+
 
 
         self.warp.update()
@@ -139,6 +148,7 @@ class STAGE:
                     break
                 elif enemy.TYPE == 'BOSS' and contact_check_two_object(self.bubbles[-1], enemy):
                     self.bubbles[-1].frame = 0
+                    self.bubbles[-1].mode = self.bubbles[-1].ATTACK_NORMAL
                     self.bubbles[-1].state = self.bubbles[-1].STATE_PON
                     self.player.score += 20
                     break
@@ -172,6 +182,7 @@ class STAGE:
                 continue
             if contact_check_two_object(bubble, self.player):
                 bubble.totalFrame = 0.0
+                bubble.direct = self.player.direct
                 bubble.state = bubble.STATE_PON
                 self.player.score += 20
         #player contack stage
@@ -209,7 +220,7 @@ class STAGE:
         #elif self.currentStage == 101:
         #    self.currentStage = 1
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(4) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(100 ) + '.txt'#str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -385,7 +396,10 @@ class STAGE:
                         if contact_check_two_object(bubble, tile):
                             bubble.x = tile.get_bb_right() + bubble.RADIUS / 2
                             bubble.totalFrame = bubble.frame = 0
-                            bubble.state = bubble.STATE_NORMAL
+                            if self.player.attackMode == self.player.ATTACK_NORMAL:
+                                bubble.state = bubble.STATE_NORMAL
+                            elif self.player.attackMode == self.player.ATTACK_THUNDER:
+                                bubble.state = bubble.STATE_THUNDER
                             bubble.direct = bubble.DIRECT_UP
                     else:
                         if bubble.direct != bubble.DIRECT_RIGHT and bubble.x - bubble.RADIUS / 2 <= 50:
@@ -398,7 +412,10 @@ class STAGE:
                         if contact_check_two_object(bubble, tile):
                             bubble.x = tile.get_bb_left() - bubble.RADIUS / 2
                             bubble.totalFrame = bubble.frame = 0
-                            bubble.state = bubble.STATE_NORMAL
+                            if self.player.attackMode == self.player.ATTACK_NORMAL:
+                                bubble.state = bubble.STATE_NORMAL
+                            elif self.player.attackMode == self.player.ATTACK_THUNDER:
+                                bubble.state = bubble.STATE_THUNDER
                             bubble.direct = bubble.DIRECT_UP
                     else:
                         if bubble.direct != bubble.DIRECT_LEFT and 1150 <= bubble.x + bubble.RADIUS / 2:
@@ -477,7 +494,7 @@ class STAGE:
                 elif item.itemNumber == item.KIND_FAST:
                     self.player.currentAttackTerm = self.player.ATTACK_TERM_MIN
                 elif item.itemNumber == item.KIND_THUNDER:
-                    pass
+                    self.player.attackMode = self.player.ATTACK_THUNDER
 
 
 def contact_check_two_object(a, b):

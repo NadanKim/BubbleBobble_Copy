@@ -1,4 +1,5 @@
 from pico2d import *
+from EFFECT import EFFECT
 
 class BUBBLE:
     sprite = None
@@ -8,17 +9,20 @@ class BUBBLE:
     MOVE_SPEED_KMPH = 80.0
     FLY_SPEED_KMPH = 15.0
     ACTION_PER_TIME = 1.0 / 1.2
+    ATTACK_NORMAL, ATTACK_THUNDER = 0, 1
     DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_FLY, STATE_NORMAL, STATE_NORMAL_PINK, STATE_NORMAL_RED, STATE_THUNDER = 14, 12, 11, 10, 9
     STATE_THUNDER_PINK, STATE_THUNDER_RED, STATE_WATER, STATE_WATER_PINK, STATE_WATER_RED = 8, 7, 6, 5, 4
     STATE_FIRE, STATE_FIRE_PINK, STATE_FIRE_RED, STATE_PON, STATE_NONE = 3, 2, 1, 0, 99
-    def __init__(self, x, y, direct, attackRange):
+    def __init__(self, x, y, direct, attackRange, mode):
         self.frame, self.totalFrame = 0, 0
         self.frameTime = 0
         self.x, self.y = x, y
         self.bfX = x
+        self.make_effect = False
         self.first_loc_x = x
         self.direct = direct
+        self.mode = mode
         self.directTemp = direct
         self.attackRange = attackRange
         self.state = self.STATE_FLY
@@ -102,7 +106,10 @@ class BUBBLE:
             else:
                 self.x = min(1200 - self.RADIUS / 2 - 50, self.x - self.moveSpeedPPS * self.frameTime)
             self.totalFrame = self.frame = 0
-            self.state = self.STATE_NORMAL
+            if self.mode == self.ATTACK_NORMAL:
+                self.state = self.STATE_NORMAL
+            elif self.mode == self.ATTACK_THUNDER:
+                self.state = self.STATE_THUNDER
             self.direct = self.DIRECT_UP
 
 
@@ -131,8 +138,37 @@ class BUBBLE:
             self.state = self.STATE_PON
 
 
+    def handle_thunder(self):
+        if self.direct == self.DIRECT_UP:
+            self.y += self.flySpeedPPS * self.frameTime
+            if 750 < self.y - self.RADIUS:
+                self.y = -self.RADIUS
+        elif self.direct == self.DIRECT_DOWN:
+            self.y -= self.flySpeedPPS * self.frameTime
+            if self.y + self.RADIUS < 0:
+                self.y = 750 + self.RADIUS
+        elif self.direct == self.DIRECT_LEFT:
+            self.x = max(self.RADIUS/2 + 50, self.x - self.flySpeedPPS * self.frameTime)
+        elif self.direct == self.DIRECT_RIGHT:
+            self.x = min(1200 - self.RADIUS / 2 - 50, self.x + self.flySpeedPPS * self.frameTime)
+
+        if self.state == self.STATE_THUNDER and 35 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.state = self.STATE_THUNDER_PINK
+        elif self.state == self.STATE_THUNDER_PINK and 14 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.state = self.STATE_THUNDER_RED
+        elif self.state == self.STATE_THUNDER_RED and 7 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.mode = self.ATTACK_NORMAL
+            self.state = self.STATE_PON
+
+
 
     def handle_pon(self):
+        if self.mode == self.ATTACK_THUNDER:
+            self.state = self.STATE_NONE
+            self.make_effect = True
         if 4<=self.totalFrame:
             self.state = self.STATE_NONE
 
@@ -146,6 +182,9 @@ class BUBBLE:
         STATE_NORMAL: handle_normal,
         STATE_NORMAL_PINK: handle_normal,
         STATE_NORMAL_RED: handle_normal,
+        STATE_THUNDER: handle_thunder,
+        STATE_THUNDER_PINK: handle_thunder,
+        STATE_THUNDER_RED: handle_thunder,
         STATE_PON: handle_pon,
         STATE_NONE: handle_none
     }
@@ -158,6 +197,15 @@ class BUBBLE:
         self.frame = int(self.totalFrame) % self.numSprite
         # change state
         self.handle_state[self.state](self)
+        # make Effects
+        if self.make_effect == True:
+            if self.direct == self.DIRECT_LEFT:
+                self.direct = self.DIRECT_RIGHT
+            else:
+                self.direct = self.DIRECT_LEFT
+            if self.mode == self.ATTACK_THUNDER:
+                temp = EFFECT(self.x, self.y, EFFECT.STATE_THUNDER, self.direct)
+                return temp
 
 
 

@@ -108,6 +108,8 @@ def draw():
         item.draw()
     for enemy in stage.enemies:
         enemy.draw()
+    for effect in stage.effects:
+        effect.draw()
     stage.warp.draw()
     stage.player.draw()
 

@@ -7,6 +7,7 @@ class PLAYER():
     ATTACK_RANGE_MIN, ATTACK_RANGE_MAX = 300, 450
     JUMP_MIN = 120
     ATTACK_TERM_MAX, ATTACK_TERM_MIN = 8, 4
+    ATTACK_NORMAL, ATTACK_THUNDER = 0, 1
     STATE_STAY, STATE_MOVE, STATE_DEAD, STATE_ATTACK = 11, 9, 7, 5
     STATE_JUMP, STATE_DOWN, STATE_BURN, STATE_STAGEMOVE = 3, 1, 13, 14
     FIRST_LOC_X, FIRST_LOC_Y = 400, 300
@@ -40,6 +41,7 @@ class PLAYER():
         self.bubble = False
         self.score = 0
 
+        self.attackMode = self.ATTACK_NORMAL
         self.currentAttackTerm = self.ATTACK_TERM_MAX
         self.couldAttack = 0 #0 then attack possible and one attack then add currentAttackTerm
         self.jumpHeight = self.JUMP_MIN
@@ -230,6 +232,7 @@ class PLAYER():
             self.attackRange = self.ATTACK_RANGE_MIN
             self.change_actionPerTime()
             self.playerHealth -= 1
+            self.attackMode = self.ATTACK_NORMAL
             self.noDieTime = 25.0
             self.noDie = True
 
@@ -288,9 +291,9 @@ class PLAYER():
         if self.bubble == True:
             self.bubble = False
             if self.direct == self.DIRECT_LEFT:
-               return BUBBLE(self.x-self.XSIZE/2, self.y, self.direct, self.attackRange)
+               return BUBBLE(self.x-self.XSIZE/2, self.y, self.direct, self.attackRange, self.attackMode)
             else:
-                return BUBBLE(self.x+self.XSIZE/2, self.y, self.direct, self.attackRange)
+                return BUBBLE(self.x+self.XSIZE/2, self.y, self.direct, self.attackRange, self.attackMode)
 
 
     def draw(self):
