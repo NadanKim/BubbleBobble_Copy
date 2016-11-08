@@ -16,6 +16,7 @@ class BOSS():
         self.stayTime = 6.0
         self.x = x
         self.y = y
+        self.health = 25
         self.change_moveSpeed()
         self.isAttack = 0
         self.direct = random.randint(0, 1)
@@ -97,7 +98,7 @@ class BOSS():
 
     def handle_angry(self):
         if self.direct == self.DIRECT_LEFT:
-            self.x = max(self.XSIZE/ + 50, self.x -  self.moveSpeedPPS * self.frameTime * 1.5)
+            self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime * 1.5)
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
                 self.isAttack = 5
@@ -125,8 +126,8 @@ class BOSS():
             self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
-        self.y += self.movepSpeedPPS * self.frameTime * 0.5
-        if self.frame == 11:
+        self.y += self.moveSpeedPPS * self.frameTime * 0.5
+        if 60 <= self.totalFrame:
             self.state = self.STATE_NONE
 
 
@@ -134,6 +135,7 @@ class BOSS():
         if 25 <= self.totalFrame:
             self.frame = self.totalFrame = 0
             self.state = self.STATE_ANGRY
+            self.health = 10
             self.direct = random.randint(0, 1)
             self.change_actionPerTime()
 

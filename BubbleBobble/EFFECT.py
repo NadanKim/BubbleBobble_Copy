@@ -11,6 +11,7 @@ class EFFECT:
     STATE_THUNDER, STATE_THUNDER_POW, STATE_WATER, STATE_FIRE, STATE_NONE = 0, 1, 2, 3, 99
     def __init__(self, x, y, state, direct):
         self.x = x
+        self.bfX = x
         self.y = y
         self.frameTime = 0.0
         self.frame = 0
@@ -38,6 +39,7 @@ class EFFECT:
 
 
     def handle_thunder(self):
+        self.bfX = self.x
         if self.direct == self.DIRECT_LEFT:
             self.x = self.x - self.moveSpeedPPS * self.frameTime
             if self.x < -self.SIZE:
@@ -71,6 +73,54 @@ class EFFECT:
         self.frame = int(self.totalFrame) % self.numSprite
         # change state
         self.handle_state[self.state](self)
+
+
+    def get_bb(self):
+        if self.state == self.STATE_THUNDER:
+            if self.direct == self.DIRECT_LEFT:
+                return self.x - self.SIZE / 2, self.y - self.SIZE / 2, self.bfX + self.SIZE / 2, self.y + self.SIZE / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.bfX - self.SIZE / 2, self.y - self.SIZE / 2, self.x + self.SIZE / 2, self.y + self.SIZE / 2
+            else:
+                return self.x - self.SIZE / 2, self.y - self.SIZE / 2, self.x + self.SIZE / 2, self.y + self.SIZE / 2
+        else:
+            return self.x - self.SIZE / 2, self.y - self.SIZE / 2, self.x + self.SIZE / 2, self.y + self.SIZE / 2
+
+
+    def get_bb_left(self):
+        if self.state == self.STATE_THUNDER:
+            if self.direct == self.DIRECT_LEFT:
+                return self.x - self.SIZE / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.bfX - self.SIZE / 2
+            else:
+                return self.x - self.SIZE / 2
+        else:
+            return self.x - self.SIZE / 2
+
+
+    def get_bb_bottom(self):
+        return self.y - self.SIZE / 2
+
+
+    def get_bb_right(self):
+        if self.state == self.STATE_THUNDER:
+            if self.direct == self.DIRECT_LEFT:
+                return self.bfX + self.SIZE / 2
+            elif self.direct == self.DIRECT_RIGHT:
+                return self.x + self.SIZE / 2
+            else:
+                return self.x + self.SIZE / 2
+        else:
+            return self.x + self.SIZE / 2
+
+
+    def get_bb_top(self):
+        return self.y + self.SIZE / 2
+
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
 
 
     def draw(self):

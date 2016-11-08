@@ -6,6 +6,7 @@ from PULPUL import PULPUL
 from BOSS import BOSS
 from WARP import WARP
 from TILE import TILE
+from EFFECT import EFFECT
 import random
 from pico2d import *
 import json
@@ -16,6 +17,7 @@ class STAGE:
     bigTile = None
     smallTile = None
     font = None
+    clearFont = None
     itemSprite = None
     playerHealth = None
     def __init__(self):
@@ -53,6 +55,8 @@ class STAGE:
             STAGE.itemSprite = load_image('sprite\\Item\\item_use.png')
         if STAGE.playerHealth == None:
             STAGE.playerHealth = load_image('sprite\\Item\\health.png')
+        if STAGE.clearFont == None:
+            STAGE.clearFont = Font('sprite\\surround\\Pixel.ttf', 70)
         self.stageData = None
         file = open('gameData\\ranking_data.txt', 'r')
         data = json.load(file)
@@ -102,7 +106,7 @@ class STAGE:
         if self.enemies == [] and 0 < self.stageMoveCount:
             self.stageMoveCount -= 0.05
         if self.enemies == [] and self.stageMoveCount <= 0:
-            self.stageMoveCount = 4.0
+            self.stageMoveCount = 3.0
             self.warp.warping = True
             self.stageMove()
 
@@ -127,9 +131,12 @@ class STAGE:
             self.checkItems[1].draw()
         if self.player.currentAttackTerm == self.player.ATTACK_TERM_MIN:
             self.checkItems[2].draw()
+        if self.player.attackMode == self.player.ATTACK_THUNDER:
+            self.checkItems[3].draw()
 
         for i in range(self.player.playerHealth):
             self.playerHealth.draw(20+i*25, 10, 20, 20)
+
 
 
     def contact_check(self):
@@ -168,7 +175,10 @@ class STAGE:
                         enemy.frame = enemy.totalFrame = 0
                         enemy.state = enemy.STATE_DEAD
                         enemy.change_actionPerTime()
-                        self.player.score += 100
+                        if enemy.TYPE == 'BOSS':
+                            self.player.score += 10000
+                        else:
+                            self.player.score += 100
             for attack in self.attacks:
                 if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
@@ -197,6 +207,8 @@ class STAGE:
             self.contact_check_player_item()
         #item and stage contact
         self.contact_check_stage_item()
+        #effect and enemy contact
+        self.contact_check_effect_enemy()
 
 
     def stageMove(self):
@@ -214,13 +226,14 @@ class STAGE:
 
         self.bubbles = []
         self.items = []
+        self.effects = []
         self.currentStage += 1
-        #if self.currentStage == 8:
-        #   self.currentStage = 100
-        #elif self.currentStage == 101:
-        #    self.currentStage = 1
+        if self.currentStage == 8:
+            self.currentStage = 100
+        elif self.currentStage == 101:
+            self.currentStage = 0
         #get stage data file
-        fileDirection = 'Stage\\stage' + str(100 ) + '.txt'#str(self.currentStage) + '.txt'
+        fileDirection = 'Stage\\stage' + str(self.currentStage) + '.txt'
         stageDataFile = open(fileDirection, 'r')
         stageData = json.load(stageDataFile)
         stageDataFile.close()
@@ -427,6 +440,8 @@ class STAGE:
 
     def contact_check_stage_enemyBubble(self):
         for enemy in self.enemies:
+            if enemy.TYPE == 'BOSS':
+                continue
             if not enemy.state in (enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED):
                 continue
             for tile in self.stages:
@@ -495,6 +510,37 @@ class STAGE:
                     self.player.currentAttackTerm = self.player.ATTACK_TERM_MIN
                 elif item.itemNumber == item.KIND_THUNDER:
                     self.player.attackMode = self.player.ATTACK_THUNDER
+
+
+    def contact_check_effect_enemy(self):
+        for effect in self.effects:
+            if effect.state in (effect.STATE_NONE, effect.STATE_THUNDER_POW):
+                continue
+            for enemy in self.enemies:
+                if enemy.state in (
+                enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,#
+                enemy.STATE_NONE, enemy.STATE_PON):
+                    continue
+                if effect.state == effect.STATE_THUNDER:
+                    if enemy.TYPE == 'BOSS':
+                        if contact_check_two_object(effect, enemy):
+                            enemy.health -= 1
+                            if enemy.state == enemy.STATE_WALK and enemy.health <= 10:
+                                enemy.state = enemy.STATE_ANGRY
+                            if enemy.health < 0:
+                                enemy.frame = enemy.totalFrame = 0
+                                enemy.state = enemy.STATE_STUCK_RED
+                                enemy.change_actionPerTime()
+                            effect.frame = effect.totalFrame = 0
+                            effect.state = effect.STATE_THUNDER_POW
+                    else:
+                        if contact_check_two_object(effect, enemy):
+                            enemy.direct = random.randint(0, 1)
+                            enemy.frame = enemy.totalFrame = 0
+                            enemy.state = enemy.STATE_DEAD
+                            enemy.change_actionPerTime()
+                            self.player.score += 100
+                            self.effects.append(EFFECT(enemy.x, enemy.y, EFFECT.STATE_THUNDER_POW, enemy.direct))
 
 
 def contact_check_two_object(a, b):

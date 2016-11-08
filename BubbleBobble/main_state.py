@@ -116,6 +116,12 @@ def draw():
     if draw_box == True:
         draw_bb()
 
+    if not stage.enemies == [] and stage.enemies[0].TYPE == 'BOSS' and \
+                    stage.enemies[0].state == stage.enemies[0].STATE_DEAD:
+        stage.clearFont.draw(200, 500, "Congratulation!!!", (255, 255, 255))
+        stage.clearFont.draw(100, 350, "You Clear This Game!!!", (255, 40, 40))
+
+
     if stage.player.playerHealth < 0 or pause == True:
         background.draw(600, 400)
         font.draw(500, 600, "CONTINUE??", (255, 255, 40))
@@ -130,6 +136,9 @@ def update():
     frame_time = get_frame_time()
     if 0 <= stage.player.playerHealth and pause == False:
         stage.update(frame_time)
+    if not stage.enemies == [] and stage.enemies[0].TYPE == 'BOSS' and \
+                    stage.enemies[0].state == stage.enemies[0].STATE_NONE:
+        game_framework.change_state(ranking_state)
 
 
 def pause():
@@ -152,3 +161,5 @@ def draw_bb():
         tile.draw_bb()
     for item in stage.items:
         item.draw_bb()
+    for effect in stage.effects:
+        effect.draw_bb()
