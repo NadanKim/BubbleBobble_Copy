@@ -7,10 +7,12 @@ from BOSS import BOSS
 from WARP import WARP
 from TILE import TILE
 from EFFECT import EFFECT
-import random
+from ITEM import ITEM
 from pico2d import *
 import json
-from ITEM import ITEM
+import random
+
+
 
 class STAGE:
     background = None

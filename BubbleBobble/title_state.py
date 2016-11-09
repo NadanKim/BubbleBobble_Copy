@@ -11,7 +11,7 @@ font = None
 logo_time = 0.0
 frame = 0
 select = 250
-START_BUTTON, RANKING_BUTTON, EXIT_BUTTON =  250, 150, 50
+START_BUTTON, RANKING_BUTTON, EXIT_BUTTON = 250, 150, 50
 
 
 def enter():
