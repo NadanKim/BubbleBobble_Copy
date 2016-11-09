@@ -5,7 +5,7 @@ pygame.init()
 
 window = pygame.display.set_mode((800, 600))
 
-pygame.mixer.music.load("GameSound\\Background\\MainTheme.mp3")
+pygame.mixer.music.load("MainTheme.ogg")
 pygame.mixer.music.play(-1, 0.0)
 
 circle = pygame.draw.circle(window, (50,30,90), (90, 30), 16, 5)
