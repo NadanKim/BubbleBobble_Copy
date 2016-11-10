@@ -22,6 +22,7 @@ class STAGE:
     clearFont = None
     itemSprite = None
     playerHealth = None
+    musics = []
     def __init__(self):
         self.currentStage = 0
         self.stageMoveCount = 0.0
@@ -39,6 +40,8 @@ class STAGE:
         self.items = []
         self.checkItems = []
         self.effects = []
+        self.playTime = 0.0
+        self.hurry = False
         for i in range(4):
             self.checkItems.append(ITEM(100, 100))
         for i in range(4):
@@ -59,13 +62,22 @@ class STAGE:
             STAGE.playerHealth = load_image('sprite\\Item\\health.png')
         if STAGE.clearFont == None:
             STAGE.clearFont = Font('sprite\\surround\\Pixel.ttf', 70)
+        self.musics.append(load_music('GameSound\\Background\\MainTheme.ogg'))
+        self.musics.append(load_music('GameSound\\Background\\HurryMainFast.ogg'))
+        self.musics.append(load_music('GameSound\\Background\\BossStage.ogg'))
+        self.musics.append(load_music('GameSound\\Background\\GameEnding.ogg'))
         self.stageData = None
+        self.musics[0].repeat_play()
         file = open('gameData\\ranking_data.txt', 'r')
         data = json.load(file)
         self.highScore = data[0]['score']
         file.close()
 
     def update(self, frame_time):
+        self.playTime += frame_time
+        if self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
+            self.hurry = True
+            self.musics[1].play()
         bubble = self.player.update(frame_time)
         if not bubble == None:
             self.bubbles.append(bubble)
@@ -99,8 +111,6 @@ class STAGE:
             else:
                 effect.update(frame_time)
 
-
-
         self.warp.update()
         self.contact_check()
 
@@ -126,6 +136,8 @@ class STAGE:
         self.font.draw(80, 770, "PLAYER", (40, 255, 40))
         self.font.draw(210 - (len(str(self.player.score))-1)*25, 730, str(self.player.score), (255, 255, 255))
         self.font.draw(1130, 20, str(self.currentStage), (255, 255, 255))
+        if self.hurry:
+            self.font.draw(440, 360, "HURRY UP!!", (255, 255, 255))
 
         if self.player.currentSpeedKMPH == self.player.MAX_MOVE_SPEED_KMPH:
             self.checkItems[0].draw()
@@ -169,6 +181,8 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
+                        self.playTime = 0.0
+                        self.hurry = False
                         self.player.change_actionPerTime()
                 #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
@@ -179,6 +193,7 @@ class STAGE:
                         enemy.change_actionPerTime()
                         if enemy.TYPE == 'BOSS':
                             self.player.score += 10000
+                            self.musics[3].play()
                         else:
                             self.player.score += 100
             for attack in self.attacks:
@@ -186,6 +201,8 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
+                        self.playTime = 0.0
+                        self.hurry = False
                         self.player.change_actionPerTime()
         #bubble contack player
         for bubble in self.bubbles:
@@ -226,12 +243,17 @@ class STAGE:
             "THUNDER": ITEM.KIND_THUNDER
         }
 
+        self.playTime = 0.0
         self.bubbles = []
         self.items = []
         self.effects = []
         self.currentStage += 1
+        if self.hurry:
+            self.hurry = False
+            self.musics[0].repeat_play()
         if self.currentStage == 8:
             self.currentStage = 100
+            self.musics[2].play()
         elif self.currentStage == 101:
             self.currentStage = 0
         #get stage data file

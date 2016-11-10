@@ -15,6 +15,7 @@ name = []
 namePos = 0
 list = []
 temp = None
+ranking_sound = None
 
 
 def get_bb():
@@ -25,7 +26,7 @@ def get_bb():
 
 
 def enter():
-    global font, board, list, temp, real_list, changeBoxX, name, namePos
+    global font, board, list, temp, real_list, changeBoxX, name, namePos, ranking_sound
     changeBoxX = 792
     name = [65, 65, 65]
     namePos = 0
@@ -42,8 +43,12 @@ def enter():
     list.append({'score': temp['score'], 'round': temp['round'], 'name': name})
     file.close()
 
+    ranking_sound = load_music('GameSound\\Background\\Ranking.ogg')
+    ranking_sound.set_volume(64)
+    ranking_sound.play()
+
 def exit():
-    global font, board, list
+    global font, board, list, ranking_sound
 
     list.sort(key=lambda e: (e['score']), reverse=True)
     list = list[:5]
@@ -58,6 +63,8 @@ def exit():
 
     del(font)
     del(board)
+    del(ranking_sound)
+    ranking_sound = None
 
 
 def pause():

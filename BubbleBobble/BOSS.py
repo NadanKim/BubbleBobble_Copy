@@ -16,7 +16,7 @@ class BOSS():
         self.stayTime = 6.0
         self.x = x
         self.y = y
-        self.health = 25
+        self.health = 1
         self.change_moveSpeed()
         self.isAttack = 0
         self.direct = random.randint(0, 1)
@@ -127,7 +127,7 @@ class BOSS():
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
         self.y += self.moveSpeedPPS * self.frameTime * 0.5
-        if 60 <= self.totalFrame:
+        if 999 <= self.totalFrame:
             self.state = self.STATE_NONE
 
 

@@ -11,28 +11,36 @@ special_key = False
 draw_box = False
 font = None
 pause = False
+over_music = False
 select = 0
 current_time = get_time()
 YES_BUTTON, NO_BUTTON = 420, 840
 
 def enter():
-    global stage, background, font, select, pause
+    global stage, background, font, select, pause, over_music
     pause = False
     background = load_image("sprite\\surround\\pauseBackground.png")
     font = load_font('sprite\\surround\\Pixel.ttf', 70)
+    over_music = load_music('GameSound\\Background\\GameOver.ogg')
     stage = STAGE()
     select = YES_BUTTON
 
 
 def exit():
-    global background, font
+    global background, font, over_music, stage
     file = open('gameData\\temp_data.txt', 'w')
     json.dump({"score": stage.player.score, "round": stage.currentStage}, file)
     file.close()
+    for i in range(len(stage.musics)):
+        stage.musics.pop()
+    del(stage)
     del(background)
     del(font)
+    del(over_music)
     font = None
+    stage = None
     background = None
+    over_music = None
 
 
 
@@ -84,7 +92,14 @@ def handle_events():
                         stage.player.noDieTime = 25.0
                         stage.player.noDie = True
                 else:
+                    over_music.play()
+                    delay(2.5)
                     game_framework.change_state(ranking_state)
+        elif not stage.enemies == [] and stage.enemies[0].TYPE == 'BOSS' and stage.enemies[0].state == stage.enemies[0].STATE_DEAD:
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
+                game_framework.change_state(ranking_state)
+            else:
+                stage.player.handle_event(event)
         else:
             stage.player.handle_event(event)
 

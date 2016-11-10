@@ -1,19 +1,21 @@
-import pygame
-from pygame.locals import *
+from pico2d import *
 
-pygame.init()
+open_canvas()
 
-window = pygame.display.set_mode((800, 600))
+run = True
+music = load_music('GameSound\\Background\\MainTheme.ogg')
+music.set_volume(64)
+music.repeat_play()
+effect = load_wav('GameSound\\Character\\attack.wav')
 
-pygame.mixer.music.load("MainTheme.ogg")
-pygame.mixer.music.play(-1, 0.0)
+while run:
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            run = False
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            run = False
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_q):
+            effect.play()
 
-circle = pygame.draw.circle(window, (50,30,90), (90, 30), 16, 5)
-
-window.blit(window, circle)
-
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-    pygame.display.update()
+close_canvas()

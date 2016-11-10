@@ -5,17 +5,23 @@ from pico2d import *
 
 name = "StartState"
 image = None
+start_sound = None
 logo_time = 0.0
 
 
 def enter():
-    global image
+    global image, start_sound
     image = load_image('sprite\\surround\\kpu_credit.png')
+    start_sound = load_music('GameSound\\Background\\GameTurnedOn.ogg')
+    start_sound.set_volume(64)
+    start_sound.play()
 
 
 def exit():
-    global image
+    global image, start_sound
     del(image)
+    del(start_sound)
+    start_sound = None
     image = None
 
 

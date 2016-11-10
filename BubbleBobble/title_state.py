@@ -15,10 +15,11 @@ START_BUTTON, RANKING_BUTTON, EXIT_BUTTON = 250, 150, 50
 
 
 def enter():
-    global background, title, font
+    global background, title, font, select
     background = load_image("sprite\\surround\\titleBackground.png")
     title = load_image('sprite\\surround\\title.png')
     font = Font('sprite\\surround\\Pixel.ttf', 50)
+    select = 250
 
 
 def exit():
