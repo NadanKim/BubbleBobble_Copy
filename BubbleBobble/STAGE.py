@@ -23,6 +23,7 @@ class STAGE:
     itemSprite = None
     playerHealth = None
     musics = []
+    sounds = None
     def __init__(self):
         self.currentStage = 0
         self.stageMoveCount = 0.0
@@ -62,6 +63,9 @@ class STAGE:
             STAGE.playerHealth = load_image('sprite\\Item\\health.png')
         if STAGE.clearFont == None:
             STAGE.clearFont = Font('sprite\\surround\\Pixel.ttf', 70)
+        if STAGE.sounds ==None:
+            STAGE.sounds = load_wav('GameSound\\Character\\enemyDown.wav')
+            STAGE.sounds.set_volume(40)
         self.musics.append(load_music('GameSound\\Background\\MainTheme.ogg'))
         self.musics.append(load_music('GameSound\\Background\\HurryMainFast.ogg'))
         self.musics.append(load_music('GameSound\\Background\\BossStage.ogg'))
@@ -75,7 +79,7 @@ class STAGE:
 
     def update(self, frame_time):
         self.playTime += frame_time
-        if self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
+        if not self.enemies ==[] and self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
             self.hurry = True
             self.musics[1].play()
         bubble = self.player.update(frame_time)
@@ -183,6 +187,7 @@ class STAGE:
                         self.player.state = self.player.STATE_DEAD
                         self.playTime = 0.0
                         self.hurry = False
+                        self.player.sounds[2].play()
                         self.player.change_actionPerTime()
                 #enemy is stucked
                 elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
@@ -190,6 +195,7 @@ class STAGE:
                         enemy.direct = random.randint(0, 1)
                         enemy.frame = enemy.totalFrame = 0
                         enemy.state = enemy.STATE_DEAD
+                        self.sounds.play()
                         enemy.change_actionPerTime()
                         if enemy.TYPE == 'BOSS':
                             self.player.score += 10000
@@ -201,6 +207,7 @@ class STAGE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
+                        self.player.sounds[2].play()
                         self.playTime = 0.0
                         self.hurry = False
                         self.player.change_actionPerTime()
@@ -251,7 +258,7 @@ class STAGE:
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
-        if self.currentStage == 8:
+        if self.currentStage == 10:
             self.currentStage = 100
             self.musics[2].play()
         elif self.currentStage == 101:
@@ -498,11 +505,13 @@ class STAGE:
                         attack.x = tile.get_bb_right() + attack.RADIUS / 2
                         attack.totalFrame = attack.frame = 0
                         attack.state = attack.STATE_BOOM
+                        attack.sounds.play()
                 elif attack.direct == attack.DIRECT_RIGHT:
                     if contact_check_two_object(attack, tile):
                         attack.x = tile.get_bb_left() - attack.RADIUS / 2
                         attack.totalFrame = attack.frame = 0
                         attack.state = attack.STATE_BOOM
+                        attack.sounds.play()
 
 
     def contact_check_stage_item(self):
@@ -522,6 +531,7 @@ class STAGE:
             if contact_check_two_object(self.player, item):
                 item.state = item.STATE_FONT
                 item.direct = item.DIRECT_STAY
+                item.sounds.play()
                 self.player.score += item.score
                 if item.itemNumber == item.KIND_HEALTH:
                     self.player.playerHealth += 1
@@ -557,6 +567,7 @@ class STAGE:
                                 enemy.change_actionPerTime()
                             effect.frame = effect.totalFrame = 0
                             effect.state = effect.STATE_THUNDER_POW
+                            effect.sounds[0].play()
                     else:
                         if contact_check_two_object(effect, enemy):
                             enemy.direct = random.randint(0, 1)
@@ -565,6 +576,7 @@ class STAGE:
                             enemy.change_actionPerTime()
                             self.player.score += 100
                             self.effects.append(EFFECT(enemy.x, enemy.y, EFFECT.STATE_THUNDER_POW, enemy.direct))
+                            effect.sounds[0].play()
 
 
 def contact_check_two_object(a, b):

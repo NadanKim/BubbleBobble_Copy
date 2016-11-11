@@ -10,6 +10,7 @@ class MAGIC:
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     STATE_FLY, STATE_BOOM = 1, 0
     STATE_NONE = 99
+    sounds = None
     def __init__(self, x, y, direct):
         self.frame, self.totalFrame = 0, 0
         self.frameTime = 0
@@ -20,9 +21,12 @@ class MAGIC:
         self.moveSpeedPPS = 0.0
         self.change_moveSpeed()
         if MAGIC.sprite == None:
-            self.sprite = load_image('sprite\\Effect\\magic.png')
+            MAGIC.sprite = load_image('sprite\\Effect\\magic.png')
         self.xSprite, self.ySprite = 16, 16
         self.numSprite = 4
+        if MAGIC.sounds == None:
+            MAGIC.sounds = load_wav('GameSound\\Character\\magicianAttackMiss.wav')
+            MAGIC.sounds.set_volume(32)
 
 
     def change_moveSpeed(self):
@@ -51,6 +55,7 @@ class MAGIC:
         if self.x == self.RADIUS/2 + 50 or self.x == 1200 - self.RADIUS/2 - 50:
             self.totalFrame = self.frame = 0
             self.state = self.STATE_BOOM
+            self.sounds.play()
 
 
     def handle_boom(self):

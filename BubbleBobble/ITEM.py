@@ -11,6 +11,7 @@ class ITEM:
     DIRECT_DOWN, DIRECT_STAY = 0, 1
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 15.0
+    sounds = None
     def __init__(self, x, y, kind=None):
         x = max(50 + self.XSIZE, x)
         x = min(1150 - self.XSIZE, x)
@@ -22,6 +23,7 @@ class ITEM:
         self.spriteSize = 16
         self.rewindTime = 0.0
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
+
         if kind == None:
             self.itemNumber = random.randint(0, 13)
         else:
@@ -31,6 +33,9 @@ class ITEM:
             ITEM.sprite = load_image('sprite\\Item\\item_use.png')
         if ITEM.font == None:
             ITEM.font = Font('sprite\\surround\\Pixel.ttf', 20)
+        if ITEM.sounds == None:
+            ITEM.sounds = load_wav('GameSound\\Character\\item.wav')
+            ITEM.sounds.set_volume(50)
 
 
     def change_moveSpeed(self, currentSpeedKMPH):

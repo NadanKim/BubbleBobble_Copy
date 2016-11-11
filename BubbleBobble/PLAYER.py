@@ -17,7 +17,7 @@ class PLAYER():
     XSIZE, YSIZE = 50, 70
     sprite = None
     stageMove = None
-
+    sounds = []
     def __init__(self):
         self.noDie = False
         self.noDieTime = 0.0
@@ -40,6 +40,12 @@ class PLAYER():
         self.spriteCount = 0
         self.bubble = False
         self.score = 0
+        self.sounds.append(load_wav('GameSound\\Character\\jump.wav'))
+        self.sounds.append(load_wav('GameSound\\Character\\attack.wav'))
+        self.sounds.append(load_wav('GameSound\\Character\\down.wav'))
+        self.sounds[0].set_volume(60)
+        self.sounds[1].set_volume(60)
+        self.sounds[2].set_volume(40)
 
         self.attackMode = self.ATTACK_NORMAL
         self.currentAttackTerm = self.ATTACK_TERM_MAX
@@ -131,11 +137,13 @@ class PLAYER():
                     self.state = self.STATE_ATTACK
                     self.couldAttack = self.currentAttackTerm
                     self.bubble = True
+                    self.sounds[1].play()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_w):  #jump
                 if self.jumpPoint == 0:
                     self.state = self.STATE_JUMP
                     self.yAtJump = self.y
                     self.jumpPoint = 1
+                    self.sounds[0].play()
 
             elif (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT) and self.direct == self.DIRECT_LEFT:
                 if self.jumpPoint == 0:

@@ -11,12 +11,12 @@ class BOSS():
     MOVE_SPEED_KMPH = 12.0
     XSIZE, YSIZE = 200, 300
     sprite = None
-
+    sounds = None
     def __init__(self, x ,y):
         self.stayTime = 6.0
         self.x = x
         self.y = y
-        self.health = 1
+        self.health = 25
         self.change_moveSpeed()
         self.isAttack = 0
         self.direct = random.randint(0, 1)
@@ -28,6 +28,9 @@ class BOSS():
         self.stateTemp = None
         if BOSS.sprite == None:
             BOSS.sprite = load_image('sprite\\Enemy\\boss.png')
+        if BOSS.sounds == None:
+            BOSS.sounds = load_wav('GameSound\\Character\\bossAttack.wav')
+            BOSS.sounds.set_volume(32)
         self.xSprite = 64
         self.ySprite = 64
         self.numSprite = 8
@@ -80,11 +83,13 @@ class BOSS():
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
                 self.isAttack = 5
+                self.sounds.play()
         elif self.direct == self.DIRECT_RIGHT:
             self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
+                self.sounds.play()
         if self.yDirect == self.DIRECT_UP:
             self.y = min(675 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime)
             if self.y == 675 - self.YSIZE / 2:
@@ -102,11 +107,13 @@ class BOSS():
             if self.x == self.XSIZE/2 + 50:
                 self.direct = self.DIRECT_RIGHT
                 self.isAttack = 5
+                self.sounds.play()
         elif self.direct == self.DIRECT_RIGHT:
             self.x = min(1200 - self.XSIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime * 1.5)
             if self.x == 1200 - self.XSIZE/2 - 50:
                 self.direct = self.DIRECT_LEFT
                 self.isAttack = 5
+                self.sounds.play()
         if self.yDirect == self.DIRECT_UP:
             self.y = min(675 - self.YSIZE / 2, self.y + self.moveSpeedPPS * self.frameTime * 1.5)
             if self.y == 675 - self.YSIZE / 2:

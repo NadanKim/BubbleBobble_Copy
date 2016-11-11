@@ -19,7 +19,7 @@ class BOTTLE:
         self.moveSpeedPPS = 0.0
         self.change_moveSpeed()
         if BOTTLE.sprite == None:
-            self.sprite = load_image('sprite\\Effect\\bottle.png')
+            BOTTLE.sprite = load_image('sprite\\Effect\\bottle.png')
         self.xSprite, self.ySprite = 13, 14
         self.numSprite = 4
 

@@ -9,6 +9,7 @@ class EFFECT:
     MOVE_SPEED_KMPH = 80.0
     DIRECT_LEFT, DIRECT_RIGHT = 0, 1
     STATE_THUNDER, STATE_THUNDER_POW, STATE_WATER, STATE_FIRE, STATE_NONE = 0, 1, 2, 3, 99
+    sounds = []
     def __init__(self, x, y, state, direct):
         self.x = x
         self.bfX = x
@@ -30,6 +31,9 @@ class EFFECT:
             self.SIZE = 50
         if EFFECT.THUNDER == None:
             EFFECT.THUNDER = load_image('sprite\\Effect\\thunderEffect.png')
+
+        self.sounds.append(load_wav('GameSound\\Character\\thunderBubble.wav'))
+        self.sounds[0].set_volume(32)
 
 
     def change_moveSpeed(self, MOVE_SPEED_KMPH):
