@@ -316,17 +316,17 @@ class STAGE:
                     and not self.player.state == self.player.STATE_STAGEMOVE:
                 # check left or right tile
                 if self.player.jumpPoint == 1:
-                    if self.player.get_bb_left() < tile.x and tile.x < self.player.get_bb_right() :
+                    if self.player.get_bb_left() < tile.get_bb_right() and tile.get_bb_left() < self.player.get_bb_right() :
                         continue
                 if self.player.state == self.player.STATE_MOVE or self.player.stateTemp == self.player.STATE_MOVE:
-                    if self.player.direct == self.player.DIRECT_LEFT and not 675 <= tile.y:
-                        if tile.get_bb_bottom() < self.player.y and self.player.y < tile.get_bb_top():
-                            if tile.get_bb_left() < self.player.get_bb_left() and self.player.get_bb_left() < tile.get_bb_right():
+                    if self.player.direct == self.player.DIRECT_LEFT and not 675 <= tile.y and tile.get_bb_left() < self.player.get_bb_left():
+                        if tile.get_bb_bottom() <= self.player.y and self.player.y <= tile.get_bb_top():
+                            if tile.get_bb_left() <= self.player.get_bb_left() and self.player.get_bb_left() <= tile.get_bb_right():
                                 self.player.x = tile.get_bb_right() + self.player.XSIZE / 2
                                 break
-                    elif self.player.direct == self.player.DIRECT_RIGHT and not 675 <= tile.y:
-                        if tile.get_bb_bottom() < self.player.y and self.player.y < tile.get_bb_top():
-                            if tile.get_bb_left() < self.player.get_bb_right() and self.player.get_bb_right() < tile.get_bb_right():
+                    elif self.player.direct == self.player.DIRECT_RIGHT and not 675 <= tile.y and self.player.get_bb_right() < tile.get_bb_right():
+                        if tile.get_bb_bottom() <= self.player.y and self.player.y <= tile.get_bb_top():
+                            if tile.get_bb_left() <= self.player.get_bb_right() and self.player.get_bb_right() <= tile.get_bb_right():
                                 self.player.x = tile.get_bb_left() - self.player.XSIZE / 2
                                 break
         changed = False
@@ -354,8 +354,8 @@ class STAGE:
                 continue
             for tile in self.stages:
                 # check left or right tile
-                if enemy.state == enemy.STATE_JUMP:
-                    if enemy.get_bb_left() < tile.x and tile.x < enemy.get_bb_right():
+                if enemy.state == enemy.STATE_JUMP or enemy.state == enemy.STATE_DEAD:
+                    if enemy.get_bb_left() < tile.get_bb_right() and tile.get_bb_left() < enemy.get_bb_right():
                         continue
                 if enemy.direct == enemy.DIRECT_LEFT:
                     if tile.get_bb_bottom() < enemy.y and enemy.y < tile.get_bb_top():
