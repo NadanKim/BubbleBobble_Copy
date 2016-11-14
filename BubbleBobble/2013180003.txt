@@ -1,0 +1,66 @@
+Mon Nov 14 21:06:24 2016 +0900 add obstruction enemy that never die
+Sun Nov 13 17:52:10 2016 +0900 add stage 10 and adjust other stages
+Sat Nov 12 14:42:13 2016 +0900 get a little bug
+Fri Nov 11 17:34:03 2016 +0900 make player's sounds and add stages
+Thu Nov 10 17:29:34 2016 +0900 play background sounds
+Wed Nov 9 20:16:57 2016 +0900 background music change by ogg
+Wed Nov 9 14:57:03 2016 +0900 change music file
+Tue Nov 8 11:12:24 2016 +0900 make thunder could contact enemy
+Mon Nov 7 20:31:55 2016 +0900 effect update and could make thunder bubble
+Sun Nov 6 18:34:54 2016 +0900 add boss stage and change ways to contact check stage and bubbles
+Sat Nov 5 21:50:23 2016 +0900 change ways to continue so will be seems good
+Sat Nov 5 15:19:20 2016 +0900 make continue system and connect player life and make ranking system
+Fri Nov 4 22:34:55 2016 +0900 add ranking state
+Thu Nov 3 22:00:23 2016 +0900 Add score board and character stat and health ans show stage number
+Wed Nov 2 22:58:01 2016 +0900 make item and add points and patch small bugs
+Tue Nov 1 20:13:20 2016 +0900 when bubble contact left or right then change direct, add stage 7
+Mon Oct 31 20:40:05 2016 +0900 contack check with enemy's attack and stages and update stage 6
+Sun Oct 30 19:03:01 2016 +0900 contact check enemy's bubble status and make stage 4 and 5
+Sat Oct 29 16:19:17 2016 +0900 contact check player bubble with stages
+Fri Oct 28 16:07:23 2016 +0900 change player direct by jason when stage changed
+Thu Oct 27 23:53:12 2016 +0900 enemy contact stage all complete!!
+Wed Oct 26 23:41:31 2016 +0900 change stages to adjust arcade ver / and make contact check with stage and walker and magician
+Mon Oct 24 17:10:36 2016 +0900 update stage 3 and when player drop hole than player go to top
+Sun Oct 23 15:02:47 2016 +0900 change stage 1 monster
+Fri Oct 21 10:57:22 2016 +0900 debug player contact stages
+Thu Oct 20 20:00:39 2016 +0900 player contact stage update
+Tue Oct 18 20:46:36 2016 +0900 stage connect to game
+Tue Oct 18 00:48:29 2016 +0900 now stage change posibble
+Sun Oct 16 20:41:29 2016 +0900 TITLE SELECT BUTTON ADD
+Sun Oct 16 18:07:24 2016 +0900 ppt update
+Sun Oct 16 18:06:22 2016 +0900 ppt update
+Sun Oct 16 17:52:58 2016 +0900 update
+Wed Oct 12 20:10:05 2016 +0900 update
+Tue Oct 4 18:11:11 2016 +0900 Delete waterEffect.png
+Tue Oct 4 18:11:07 2016 +0900 Delete walkerRight.png
+Tue Oct 4 18:11:03 2016 +0900 Delete walkerLeft.png
+Tue Oct 4 18:10:59 2016 +0900 Delete title.png
+Tue Oct 4 18:10:56 2016 +0900 Delete thunderEffect.png
+Tue Oct 4 18:10:52 2016 +0900 Delete tadpoleRight.png
+Tue Oct 4 18:10:48 2016 +0900 Delete tadpoleLeft.png
+Tue Oct 4 18:10:44 2016 +0900 Delete stagemove.png
+Tue Oct 4 18:10:40 2016 +0900 Delete smallMapTile.png
+Tue Oct 4 18:10:36 2016 +0900 Delete smallItem.png
+Tue Oct 4 18:10:33 2016 +0900 Delete pulpul.png
+Tue Oct 4 18:10:29 2016 +0900 Delete pont.png
+Tue Oct 4 18:10:25 2016 +0900 Delete normalBubble.png
+Tue Oct 4 18:10:22 2016 +0900 Delete magicianRight.png
+Tue Oct 4 18:10:18 2016 +0900 Delete magicianLeft.png
+Tue Oct 4 18:10:14 2016 +0900 Delete magicianAttackRight.png
+Tue Oct 4 18:10:10 2016 +0900 Delete magicianAttackLeft.png
+Tue Oct 4 18:10:06 2016 +0900 Delete hurryUp.png
+Tue Oct 4 18:10:01 2016 +0900 Delete fireEffect.png
+Tue Oct 4 18:09:57 2016 +0900 Delete drunkAttack.png
+Tue Oct 4 18:09:52 2016 +0900 Delete characterRight.png
+Tue Oct 4 18:09:48 2016 +0900 Delete characterLeft.png
+Tue Oct 4 18:09:43 2016 +0900 Delete bossRight.png
+Tue Oct 4 18:09:37 2016 +0900 Delete bossLeft.png
+Tue Oct 4 18:09:32 2016 +0900 Delete bigMaptile.png
+Tue Oct 4 18:09:23 2016 +0900 Delete bigItem.png
+Tue Oct 4 18:09:11 2016 +0900 Delete background.png
+Tue Oct 4 18:09:06 2016 +0900 Delete animation test.py
+Tue Oct 4 18:08:42 2016 +0900 Delete Bubbles.png
+Tue Oct 4 18:03:02 2016 +0900 update resources
+Wed Sep 28 14:05:11 2016 +0900 resource update
+Fri Sep 23 00:02:52 2016 +0900 test
+Mon Sep 19 16:48:00 2016 +0900 Initial commit

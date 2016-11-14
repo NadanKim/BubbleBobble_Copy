@@ -7,8 +7,8 @@ class SKULL():
     STATE_WALK, STATE_ANGRY, STATE_AFRAID, STATE_DEAD = 3, None, None, 1
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = None, None, None, None, 99
     PIXEL_PER_METER = (10.0 / 0.3)
-    MOVE_SPEED_KMPH = 15.0
-    FLY_SPEED_KMPH = 15.0
+    MOVE_SPEED_KMPH = 6.0
+    FLY_SPEED_KMPH = 6.0
     XSIZE, YSIZE = 50, 70
     sprite = None
     appearSound = None
@@ -17,6 +17,8 @@ class SKULL():
         self.stayTime = 6.0
         self.x = x
         self.y = y
+        self.playerX = 0
+        self.playerY = 0
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
         self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         self.direct = random.randint(0, 1)
@@ -72,7 +74,20 @@ class SKULL():
         draw_rectangle(*self.get_bb())
 
 
+    def set_player_loc(self, x, y):
+        self.playerX = x
+        self.playerY = y
+
+
     def handle_walk(self):
+        if self.x < self.playerX:
+            self.direct = self.DIRECT_RIGHT
+        else:
+            self.direct = self.DIRECT_LEFT
+        if self.y < self.playerY:
+            self.yDirect = self.DIRECT_UP
+        else:
+            self.yDirect = self.DIRECT_DOWN
         if self.direct == self.DIRECT_LEFT:
             self.x = max(self.XSIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
             if self.x == self.XSIZE/2 + 50:
@@ -101,7 +116,7 @@ class SKULL():
 
 
     def handle_dead(self):
-        if 8 <= self.frame:
+        if 10 <= self.totalFrame:
             self.state = self.STATE_NONE
 
 

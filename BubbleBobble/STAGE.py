@@ -44,7 +44,7 @@ class STAGE:
         self.effects = []
         self.playTime = 0.0
         self.hurry = False
-        self.skullAppear = 5
+        self.skullAppear = 1
         for i in range(4):
             self.checkItems.append(ITEM(100, 100))
         for i in range(4):
@@ -84,7 +84,7 @@ class STAGE:
         if not self.enemies == [] and self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
             self.hurry = True
             self.musics[1].play()
-        if not self.enemies == [] and self.currentStage != 100 and 43<= self.playTime and 0 < self.skullAppear:
+        if not self.enemies == [] and self.currentStage != 100 and 45<= self.playTime and 0 < self.skullAppear:
             self.enemies.append(SKULL(random.randint(300, 900), random.randint(300, 500)))
             self.skullAppear -= 1
         bubble = self.player.update(frame_time)
@@ -94,6 +94,8 @@ class STAGE:
             if self.enemies[0].TYPE == 'SKULL' and enemy.state == enemy.STATE_WALK:
                 enemy.totalFrame = enemy.frame = 0
                 enemy.state = enemy.STATE_DEAD
+            if enemy.TYPE == 'SKULL':
+                enemy.set_player_loc(self.player.x, self.player.y)
             if enemy.isPop():
                 self.items.append(ITEM(enemy.x, enemy.y))
                 self.enemies.remove(enemy)
@@ -194,7 +196,7 @@ class STAGE:
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
                         self.playTime = 0.0
-                        self.skullAppear = 5
+                        self.skullAppear = 1
                         for enemy in self.enemies:
                             if not enemy.state == enemy.STATE_WALK:
                                 continue
@@ -224,7 +226,7 @@ class STAGE:
                         self.player.state = self.player.STATE_DEAD
                         self.player.sounds[2].play()
                         self.playTime = 0.0
-                        self.skullAppear = 5
+                        self.skullAppear = 1
                         for enemy in self.enemies:
                             if not enemy.state == enemy.STATE_WALK:
                                 continue
@@ -277,7 +279,7 @@ class STAGE:
         self.items = []
         self.effects = []
         self.currentStage += 1
-        self.skullAppear = 5
+        self.skullAppear = 1
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
