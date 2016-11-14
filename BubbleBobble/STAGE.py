@@ -8,6 +8,7 @@ from WARP import WARP
 from TILE import TILE
 from EFFECT import EFFECT
 from ITEM import ITEM
+from SKULL import SKULL
 from pico2d import *
 import json
 import random
@@ -25,7 +26,7 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 9
+        self.currentStage = 0
         self.stageMoveCount = 0.0
         self.stageSize = 25
         self.tileSize = 12.5
@@ -43,6 +44,7 @@ class STAGE:
         self.effects = []
         self.playTime = 0.0
         self.hurry = False
+        self.skullAppear = 5
         for i in range(4):
             self.checkItems.append(ITEM(100, 100))
         for i in range(4):
@@ -79,13 +81,19 @@ class STAGE:
 
     def update(self, frame_time):
         self.playTime += frame_time
-        if not self.enemies ==[] and self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
+        if not self.enemies == [] and self.currentStage != 100 and 30 <= self.playTime and self.hurry == False:
             self.hurry = True
             self.musics[1].play()
+        if not self.enemies == [] and self.currentStage != 100 and 43<= self.playTime and 0 < self.skullAppear:
+            self.enemies.append(SKULL(random.randint(300, 900), random.randint(300, 500)))
+            self.skullAppear -= 1
         bubble = self.player.update(frame_time)
         if not bubble == None:
             self.bubbles.append(bubble)
         for enemy in self.enemies:
+            if self.enemies[0].TYPE == 'SKULL' and enemy.state == enemy.STATE_WALK:
+                enemy.totalFrame = enemy.frame = 0
+                enemy.state = enemy.STATE_DEAD
             if enemy.isPop():
                 self.items.append(ITEM(enemy.x, enemy.y))
                 self.enemies.remove(enemy)
@@ -164,14 +172,14 @@ class STAGE:
         #player's attack check
         if not self.bubbles == [] and self.bubbles[-1].state == self.bubbles[-1].STATE_FLY:
             for enemy in self.enemies:
-                if not enemy.TYPE == 'BOSS' and enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON) \
+                if not enemy.TYPE in ('BOSS', "SKULL") and enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON) \
                         and contact_check_two_object(self.bubbles[-1], enemy):
                     enemy.totalFrame = 0
                     enemy.state = enemy.STATE_STUCK_GREEN
                     enemy.direct = enemy.DIRECT_UP
                     self.bubbles[-1].state = self.bubbles[-1].STATE_NONE
                     break
-                elif enemy.TYPE == 'BOSS' and contact_check_two_object(self.bubbles[-1], enemy):
+                elif enemy.TYPE in('BOSS', "SKULL") and contact_check_two_object(self.bubbles[-1], enemy):
                     self.bubbles[-1].frame = 0
                     self.bubbles[-1].mode = self.bubbles[-1].ATTACK_NORMAL
                     self.bubbles[-1].state = self.bubbles[-1].STATE_PON
@@ -186,6 +194,13 @@ class STAGE:
                         self.player.frame = self.player.totalFrame = 0
                         self.player.state = self.player.STATE_DEAD
                         self.playTime = 0.0
+                        self.skullAppear = 5
+                        for enemy in self.enemies:
+                            if not enemy.state == enemy.STATE_WALK:
+                                continue
+                            if enemy.TYPE == 'SKULL':
+                                enemy.frame = enemy.totalFrame = 0
+                                enemy.state = enemy.STATE_DEAD
                         self.hurry = False
                         self.player.sounds[2].play()
                         self.player.change_actionPerTime()
@@ -209,6 +224,13 @@ class STAGE:
                         self.player.state = self.player.STATE_DEAD
                         self.player.sounds[2].play()
                         self.playTime = 0.0
+                        self.skullAppear = 5
+                        for enemy in self.enemies:
+                            if not enemy.state == enemy.STATE_WALK:
+                                continue
+                            if enemy.TYPE == 'SKULL':
+                                enemy.frame = enemy.totalFrame = 0
+                                enemy.state = enemy.STATE_DEAD
                         self.hurry = False
                         self.player.change_actionPerTime()
         #bubble contack player
@@ -255,6 +277,7 @@ class STAGE:
         self.items = []
         self.effects = []
         self.currentStage += 1
+        self.skullAppear = 5
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
@@ -390,7 +413,7 @@ class STAGE:
 
     def contact_check_stage_flying(self):
         for enemy in self.enemies:
-            if enemy.TYPE in ("WALKER", "MAGICIAN", "BOSS")  or enemy.state in (enemy.STATE_NONE, enemy.STATE_PON):
+            if enemy.TYPE in ("WALKER", "MAGICIAN", "BOSS", "SKULL")  or enemy.state in (enemy.STATE_NONE, enemy.STATE_PON):
                 continue
             for tile in self.stages:
                 # check left or right tile
