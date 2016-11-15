@@ -8,8 +8,8 @@ class BOSS():
     STATE_WALK, STATE_ANGRY, STATE_DEAD, STATE_AFRAID = 9, 7, 5, None
     STATE_STUCK_GREEN, STATE_STUCK_YELLOW, STATE_STUCK_RED, STATE_PON, STATE_NONE = None, None, 3, 1, 99
     PIXEL_PER_METER = (10.0 / 0.3)
-    MOVE_SPEED_KMPH = 12.0
-    XSIZE, YSIZE = 200, 300
+    MOVE_SPEED_KMPH = 14.0
+    XSIZE, YSIZE = 300, 380
     sprite = None
     sounds = None
     def __init__(self, x ,y):

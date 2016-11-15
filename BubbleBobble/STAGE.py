@@ -9,6 +9,7 @@ from TILE import TILE
 from EFFECT import EFFECT
 from ITEM import ITEM
 from SKULL import SKULL
+from OBJECT import OBJECT
 from pico2d import *
 import json
 import random
@@ -26,7 +27,7 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 0
+        self.currentStage = 2
         self.stageMoveCount = 0.0
         self.stageSize = 25
         self.tileSize = 12.5
@@ -42,6 +43,7 @@ class STAGE:
         self.items = []
         self.checkItems = []
         self.effects = []
+        self.objects = []
         self.playTime = 0.0
         self.hurry = False
         self.skullAppear = 1
@@ -124,6 +126,11 @@ class STAGE:
                 self.effects.remove(effect)
             else:
                 effect.update(frame_time)
+        for obj in self.objects:
+            bubble = obj.update(frame_time)
+            if not bubble == None:
+                self.bubbles.append(bubble)
+
 
         self.warp.update()
         self.contact_check()
@@ -273,6 +280,12 @@ class STAGE:
             "FAST": ITEM.KIND_FAST,
             "THUNDER": ITEM.KIND_THUNDER
         }
+        objKind = {
+            "NORMAL": OBJECT.NORMAL,
+            "THUNDER": OBJECT.THUNDER,
+            "WATER": OBJECT.WATER,
+            "FIRE": OBJECT.FIRE,
+        }
 
         self.playTime = 0.0
         self.bubbles = []
@@ -332,6 +345,13 @@ class STAGE:
         Count = 0
         for kind in itemKinds:
             self.items.append(ITEM(stageData['item']['coordinate'][Count]['x'], stageData['item']['coordinate'][Count]['y'], itemKind[kind]))
+            Count += 1
+        #Set Objects
+        self.objects = []
+        objKinds = stageData['object']['kind']
+        Count = 0
+        for kind in objKinds:
+            self.objects.append(OBJECT(stageData['object']['coordinate'][Count]['x'], stageData['object']['coordinate'][Count]['y'], objKind[kind], stageData['object']['maketime'][Count]))
             Count += 1
 
 

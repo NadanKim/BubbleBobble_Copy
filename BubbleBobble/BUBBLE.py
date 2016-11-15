@@ -9,7 +9,7 @@ class BUBBLE:
     MOVE_SPEED_KMPH = 80.0
     FLY_SPEED_KMPH = 15.0
     ACTION_PER_TIME = 1.0 / 1.2
-    ATTACK_NORMAL, ATTACK_THUNDER = 0, 1
+    ATTACK_NORMAL, ATTACK_THUNDER, ATTACK_WATER, ATTACK_FIRE = 0, 1, 2, 3
     DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_FLY, STATE_NORMAL, STATE_NORMAL_PINK, STATE_NORMAL_RED, STATE_THUNDER = 14, 12, 11, 10, 9
     STATE_THUNDER_PINK, STATE_THUNDER_RED, STATE_WATER, STATE_WATER_PINK, STATE_WATER_RED = 8, 7, 6, 5, 4
@@ -32,6 +32,15 @@ class BUBBLE:
             BUBBLE.sprite = load_image('sprite\\Effect\\bubbles.png')
         self.xSprite, self.ySprite = 14, 16
         self.numSprite = 6
+        if direct == self.DIRECT_UP:
+            if self.mode == self.ATTACK_NORMAL:
+                self.state = self.STATE_NORMAL
+            elif self.mode == self.ATTACK_THUNDER:
+                self.state = self.STATE_THUNDER
+            elif self.mode == self.ATTACK_WATER:
+                self.state = self.STATE_WATER
+            elif self.mode == self.ATTACK_FRIE:
+                self.state = self.STATE_FIRE
 
 
     def change_moveSpeed(self, MOVE_SPEED_KMPH):
@@ -110,13 +119,17 @@ class BUBBLE:
                 self.state = self.STATE_NORMAL
             elif self.mode == self.ATTACK_THUNDER:
                 self.state = self.STATE_THUNDER
+            elif self.mode == self.ATTACK_WATER:
+                self.state = self.STATE_WATER
+            elif self.mode == self.ATTACK_FRIE:
+                self.state = self.STATE_FIRE
             self.direct = self.DIRECT_UP
 
 
     def handle_normal(self):
         if self.direct == self.DIRECT_UP:
             self.y += self.flySpeedPPS * self.frameTime
-            if 750 < self.y - self.RADIUS:
+            if 700 < self.y:
                 self.y = -self.RADIUS
         elif self.direct == self.DIRECT_DOWN:
             self.y -= self.flySpeedPPS * self.frameTime
@@ -141,7 +154,7 @@ class BUBBLE:
     def handle_thunder(self):
         if self.direct == self.DIRECT_UP:
             self.y += self.flySpeedPPS * self.frameTime
-            if 750 < self.y - self.RADIUS:
+            if 700 < self.y:
                 self.y = -self.RADIUS
         elif self.direct == self.DIRECT_DOWN:
             self.y -= self.flySpeedPPS * self.frameTime

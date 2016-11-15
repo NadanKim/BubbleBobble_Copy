@@ -139,7 +139,7 @@ class WALKER():
     def handle_stuck(self):
         if self.direct == self.DIRECT_UP:
             self.y += self.flySpeedPPS * self.frameTime
-            if 750 < self.y - self.YSIZE:
+            if 700 < self.y:
                 self.y = -self.YSIZE
         elif self.direct == self.DIRECT_DOWN:
             self.y -= self.flySpeedPPS * self.frameTime

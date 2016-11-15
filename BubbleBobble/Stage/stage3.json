@@ -70,6 +70,46 @@
                  "width":50,
                  "x":850,
                  "y":575
+                }, 
+                {
+                 "ellipse":true,
+                 "height":6,
+                 "id":17,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":3.5
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"NORMAL",
+                 "visible":true,
+                 "width":48,
+                 "x":300,
+                 "y":0
+                }, 
+                {
+                 "ellipse":true,
+                 "height":6,
+                 "id":19,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":3.5
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"NORMAL",
+                 "visible":true,
+                 "width":48,
+                 "x":900,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -78,7 +118,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":12,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tileheight":25,

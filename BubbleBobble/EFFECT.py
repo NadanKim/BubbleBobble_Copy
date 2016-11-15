@@ -33,7 +33,7 @@ class EFFECT:
             EFFECT.THUNDER = load_image('sprite\\Effect\\thunderEffect.png')
 
         self.sounds.append(load_wav('GameSound\\Character\\thunderBubble.wav'))
-        self.sounds[0].set_volume(32)
+        self.sounds[0].set_volume(20)
 
 
     def change_moveSpeed(self, MOVE_SPEED_KMPH):

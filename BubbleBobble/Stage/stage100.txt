@@ -24,5 +24,12 @@
 	"x":975,
 	"y":400
 	}]
-	}
+	},
+ "object":{
+	"kind":[],
+	"coordinate":[
+	]
+	},
+	"maketime":[
+	]
 }
