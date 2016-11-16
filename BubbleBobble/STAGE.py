@@ -489,6 +489,8 @@ class STAGE:
                                 bubble.state = bubble.STATE_NORMAL
                             elif self.player.attackMode == self.player.ATTACK_THUNDER:
                                 bubble.state = bubble.STATE_THUNDER
+                            elif self.player.attackMode == self.player.ATTACK_WATER:
+                                bubble.state = bubble.STATE_WATER
                             bubble.direct = bubble.DIRECT_UP
                     else:
                         if bubble.direct != bubble.DIRECT_RIGHT and bubble.x - bubble.RADIUS / 2 <= 50:
@@ -505,6 +507,8 @@ class STAGE:
                                 bubble.state = bubble.STATE_NORMAL
                             elif self.player.attackMode == self.player.ATTACK_THUNDER:
                                 bubble.state = bubble.STATE_THUNDER
+                            elif self.player.attackMode == self.player.ATTACK_WATER:
+                                bubble.state = bubble.STATE_WATER
                             bubble.direct = bubble.DIRECT_UP
                     else:
                         if bubble.direct != bubble.DIRECT_LEFT and 1150 <= bubble.x + bubble.RADIUS / 2:

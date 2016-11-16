@@ -177,6 +177,32 @@ class BUBBLE:
             self.state = self.STATE_PON
 
 
+    def handle_water(self):
+        if self.direct == self.DIRECT_UP:
+            self.y += self.flySpeedPPS * self.frameTime
+            if 700 < self.y:
+                self.y = -self.RADIUS
+        elif self.direct == self.DIRECT_DOWN:
+            self.y -= self.flySpeedPPS * self.frameTime
+            if self.y + self.RADIUS < 0:
+                self.y = 750 + self.RADIUS
+        elif self.direct == self.DIRECT_LEFT:
+            self.x = max(self.RADIUS/2 + 50, self.x - self.flySpeedPPS * self.frameTime)
+        elif self.direct == self.DIRECT_RIGHT:
+            self.x = min(1200 - self.RADIUS / 2 - 50, self.x + self.flySpeedPPS * self.frameTime)
+
+        if self.state == self.STATE_WATER and 35 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.state = self.STATE_WATER_PINK
+        elif self.state == self.STATE_WATER_PINK and 14 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.state = self.STATE_WATER_RED
+        elif self.state == self.STATE_WATER_RED and 7 <= self.totalFrame:
+            self.totalFrame = self.frame = 0
+            self.mode = self.ATTACK_NORMAL
+            self.state = self.STATE_PON
+
+
 
     def handle_pon(self):
         if self.mode == self.ATTACK_THUNDER:
@@ -198,6 +224,9 @@ class BUBBLE:
         STATE_THUNDER: handle_thunder,
         STATE_THUNDER_PINK: handle_thunder,
         STATE_THUNDER_RED: handle_thunder,
+        STATE_WATER: handle_water,
+        STATE_WATER_PINK: handle_water,
+        STATE_WATER_RED: handle_water,
         STATE_PON: handle_pon,
         STATE_NONE: handle_none
     }
@@ -218,6 +247,9 @@ class BUBBLE:
                 self.direct = self.DIRECT_LEFT
             if self.mode == self.ATTACK_THUNDER:
                 temp = EFFECT(self.x, self.y, EFFECT.STATE_THUNDER, self.direct)
+                return temp
+            elif self.mode == self.ATTACK_WATER:
+                temp = EFFECT(self.x, self.y, EFFECT.STATE_WATER, self.direct)
                 return temp
 
 

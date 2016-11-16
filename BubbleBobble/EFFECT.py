@@ -7,7 +7,7 @@ class EFFECT:
     FIRE = None
     PIXEL_PER_METER = (10.0 / 0.3)
     MOVE_SPEED_KMPH = 80.0
-    DIRECT_LEFT, DIRECT_RIGHT = 0, 1
+    DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_THUNDER, STATE_THUNDER_POW, STATE_WATER, STATE_FIRE, STATE_NONE = 0, 1, 2, 3, 99
     sounds = []
     def __init__(self, x, y, state, direct):
@@ -18,6 +18,7 @@ class EFFECT:
         self.frame = 0
         self.totalFrame = 0.0
         self.direct = direct
+        self.directTemp = direct
         self.state = state
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
         if state == self.STATE_THUNDER or state == self.STATE_THUNDER_POW:
@@ -29,8 +30,16 @@ class EFFECT:
             self.ySprite = 16
             self.numSprite = 6
             self.SIZE = 50
+        elif state == self.STATE_WATER:
+            self.ACTION_PER_TIME = 1.0 / 1.0
+            self.xSprite = 8
+            self.ySprite = 8
+            self.numSprite = 6
+            self.SIZE = 25
         if EFFECT.THUNDER == None:
             EFFECT.THUNDER = load_image('sprite\\Effect\\thunderEffect.png')
+        if EFFECT.WATER == None:
+            EFFECT.WATER = load_image('sprite\\Effect\\waterEffect.png')
 
         self.sounds.append(load_wav('GameSound\\Character\\thunderBubble.wav'))
         self.sounds[0].set_volume(20)
@@ -59,13 +68,29 @@ class EFFECT:
             self.state = self.STATE_NONE
 
 
-    def handle_none(self):
+    def handle_water(self):
         pass
+
+
+    def handle_none(self):
+        if self.direct == self.DIRECT_LEFT:
+            self.x = max(self.SIZE/2 + 50, self.x - self.moveSpeedPPS * self.frameTime)
+            if self.x == self.SIZE/2 + 50:
+                self.direct = self.DIRECT_RIGHT
+        elif self.direct == self.DIRECT_RIGHT:
+            self.x = min(1200 - self.SIZE/2 - 50, self.x + self.moveSpeedPPS * self.frameTime)
+            if self.x == 1200 - self.SIZE/2 - 50:
+                self.direct = self.DIRECT_LEFT
+        elif self.direct == self.DIRECT_DOWN:
+            self.y = self.y - self.moveSpeedPPS * self.frameTime
+            if self.y + self.SIZE < 0:
+                self.state = self.STATE_NONE
 
 
     handle_state = {
         STATE_THUNDER: handle_thunder,
         STATE_THUNDER_POW: handle_thunder_pow,
+        STATE_WATER: handle_water,
         STATE_NONE: handle_none
     }
 
@@ -134,6 +159,9 @@ class EFFECT:
         elif self.state == self.STATE_THUNDER_POW:
             self.THUNDER.clip_draw(self.xSprite * self.frame, 0,
                                    self.xSprite, self.ySprite, self.x, self.y, self.SIZE, self.SIZE)
+        elif self.state == self.STATE_WATER:
+            self.WATER.clip_draw(self.xSprite, self.ySprite * self.direct,
+                              self.xSprite, self.ySprite, self.x, self.y, self.SIZE, self.SIZE)
 
 
     def isPop(self):
