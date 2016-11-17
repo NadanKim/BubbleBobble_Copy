@@ -26,6 +26,7 @@ class BUBBLE:
         self.directTemp = direct
         self.attackRange = attackRange
         self.state = self.STATE_FLY
+        self.makeCount = 10
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
         self.flySpeedPPS = self.change_moveSpeed(self.FLY_SPEED_KMPH)
         if BUBBLE.sprite == None:
@@ -208,7 +209,13 @@ class BUBBLE:
         if self.mode == self.ATTACK_THUNDER:
             self.state = self.STATE_NONE
             self.make_effect = True
-        if 4<=self.totalFrame:
+        elif self.mode == self.ATTACK_WATER:
+            self.state = self.STATE_PON
+            self.make_effect = True
+            self.makeCount -= 1
+            if self.makeCount <= 0:
+                self.state = self.STATE_NONE
+        if self.mode == self.ATTACK_NORMAL and 4 <= self.totalFrame:
             self.state = self.STATE_NONE
 
 

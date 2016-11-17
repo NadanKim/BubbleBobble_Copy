@@ -266,6 +266,8 @@ class STAGE:
         self.contact_check_stage_item()
         #effect and enemy contact
         self.contact_check_effect_enemy()
+        #stage and effect contact
+        self.contact_check_stage_effect()
 
 
     def stageMove(self):
@@ -604,28 +606,53 @@ class STAGE:
                 enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,#
                 enemy.STATE_NONE, enemy.STATE_PON):
                     continue
-                if effect.state == effect.STATE_THUNDER:
-                    if enemy.TYPE == 'BOSS':
-                        if contact_check_two_object(effect, enemy):
-                            enemy.health -= 1
-                            if enemy.state == enemy.STATE_WALK and enemy.health <= 10:
-                                enemy.state = enemy.STATE_ANGRY
-                            if enemy.health < 0:
-                                enemy.frame = enemy.totalFrame = 0
-                                enemy.state = enemy.STATE_STUCK_RED
-                                enemy.change_actionPerTime()
-                            effect.frame = effect.totalFrame = 0
-                            effect.state = effect.STATE_THUNDER_POW
-                            effect.sounds[0].play()
-                    else:
-                        if contact_check_two_object(effect, enemy):
-                            enemy.direct = random.randint(0, 1)
+                if enemy.TYPE == 'BOSS' and effect.state == effect.STATE_THUNDER:
+                    if contact_check_two_object(effect, enemy):
+                        enemy.health -= 1
+                        if enemy.state == enemy.STATE_WALK and enemy.health <= 10:
+                            enemy.state = enemy.STATE_ANGRY
+                        if enemy.health < 0:
                             enemy.frame = enemy.totalFrame = 0
-                            enemy.state = enemy.STATE_DEAD
+                            enemy.state = enemy.STATE_STUCK_RED
                             enemy.change_actionPerTime()
-                            self.player.score += 100
+                        effect.frame = effect.totalFrame = 0
+                        effect.state = effect.STATE_THUNDER_POW
+                        effect.sounds[0].play()
+                else :
+                    if contact_check_two_object(effect, enemy):
+                        enemy.direct = random.randint(0, 1)
+                        enemy.frame = enemy.totalFrame = 0
+                        enemy.state = enemy.STATE_DEAD
+                        enemy.change_actionPerTime()
+                        self.player.score += 100
+                        if effect.state == effect.STATE_THUNDER:
                             self.effects.append(EFFECT(enemy.x, enemy.y, EFFECT.STATE_THUNDER_POW, enemy.direct))
                             effect.sounds[0].play()
+
+
+    def contact_check_stage_effect(self):
+        for effect in self.effects:
+            if effect.state in (effect.STATE_THUNDER, effect.STATE_THUNDER_POW, effect.STATE_NONE):
+                continue
+            for tile in self.stages:
+                # check left or right tile
+                if effect.direct == effect.DIRECT_LEFT:
+                    if tile.get_bb_bottom() < effect.y and effect.y < tile.get_bb_top():
+                        if contact_check_two_object(effect, tile):
+                            effect.x = tile.get_bb_right() + effect.SIZE / 2
+                            effect.direct = effect.directTemp = effect.DIRECT_RIGHT
+                            break
+                elif effect.direct == effect.DIRECT_RIGHT:
+                    if tile.get_bb_bottom() < effect.y and effect.y < tile.get_bb_top():
+                        if contact_check_two_object(effect, tile):
+                            effect.x = tile.get_bb_left() - effect.SIZE / 2
+                            effect.direct = effect.directTemp = effect.DIRECT_LEFT
+                            break
+                elif effect.direct == effect.DIRECT_DOWN:
+                    if contact_check_two_object(effect, tile):
+                        effect.y = tile.get_bb_top() + effect.SIZE / 2
+                        effect.direct = effect.directTemp
+                        break
 
 
 def contact_check_two_object(a, b):
