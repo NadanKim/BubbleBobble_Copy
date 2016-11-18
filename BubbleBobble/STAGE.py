@@ -634,25 +634,34 @@ class STAGE:
         for effect in self.effects:
             if effect.state in (effect.STATE_THUNDER, effect.STATE_THUNDER_POW, effect.STATE_NONE):
                 continue
+            changed = False
             for tile in self.stages:
-                # check left or right tile
-                if effect.direct == effect.DIRECT_LEFT:
-                    if tile.get_bb_bottom() < effect.y and effect.y < tile.get_bb_top():
-                        if contact_check_two_object(effect, tile):
-                            effect.x = tile.get_bb_right() + effect.SIZE / 2
-                            effect.direct = effect.directTemp = effect.DIRECT_RIGHT
-                            break
-                elif effect.direct == effect.DIRECT_RIGHT:
-                    if tile.get_bb_bottom() < effect.y and effect.y < tile.get_bb_top():
-                        if contact_check_two_object(effect, tile):
-                            effect.x = tile.get_bb_left() - effect.SIZE / 2
-                            effect.direct = effect.directTemp = effect.DIRECT_LEFT
-                            break
-                elif effect.direct == effect.DIRECT_DOWN:
+                if effect.direct == effect.DIRECT_DOWN:
                     if contact_check_two_object(effect, tile):
                         effect.y = tile.get_bb_top() + effect.SIZE / 2
                         effect.direct = effect.directTemp
+                        changed = True
                         break
+                else:
+                    if effect.directTemp == effect.DIRECT_LEFT:
+                        if effect.get_bb_bottom() <= tile.y and tile.get_bb_left() <= effect.x and contact_check_two_object(effect, tile):
+                            effect.directTemp = effect.DIRECT_RIGHT
+                            effect.direct = effect.DIRECT_DOWN
+                            effect.x = tile.get_bb_right() + effect.SIZE
+                    elif effect.directTemp == effect.DIRECT_RIGHT:
+                        if effect.get_bb_bottom() <= tile.y and effect.x <= tile.get_bb_right() and contact_check_two_object(effect, tile):
+                            effect.directTemp = effect.DIRECT_LEFT
+                            effect.direct = effect.DIRECT_DOWN
+                            effect.x = tile.get_bb_left() - effect.SIZE
+
+                    if(contact_check_two_object(effect, tile)):
+                        changed = True
+
+            if changed == False:
+                effect.direct = effect.DIRECT_DOWN
+
+
+
 
 
 def contact_check_two_object(a, b):

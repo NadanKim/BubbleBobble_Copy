@@ -8,6 +8,7 @@ class EFFECT:
     PIXEL_PER_METER = (10.0 / 0.3)
     DIRECT_LEFT, DIRECT_RIGHT, DIRECT_UP, DIRECT_DOWN = 0, 1, 2, 3
     STATE_THUNDER, STATE_THUNDER_POW, STATE_WATER, STATE_FIRE, STATE_NONE = 0, 1, 2, 3, 99
+    WATER_LR, WATER_DOWN = 4, 5
     sounds = []
     def __init__(self, x, y, state, direct):
         self.x = x
@@ -16,8 +17,11 @@ class EFFECT:
         self.frameTime = 0.0
         self.frame = 0
         self.totalFrame = 0.0
-        self.direct = direct
-        self.directTemp = direct
+        if direct == self.DIRECT_LEFT:
+            self.direct = self.DIRECT_RIGHT
+        else:
+            self.direct = self.DIRECT_LEFT
+        self.directTemp = self.direct
         if state == self.STATE_WATER:
             self.direct = self.DIRECT_DOWN
         self.state = state
@@ -176,7 +180,11 @@ class EFFECT:
             self.THUNDER.clip_draw(self.xSprite * self.frame, 0,
                                    self.xSprite, self.ySprite, self.x, self.y, self.SIZE, self.SIZE)
         elif self.state == self.STATE_WATER:
-            self.WATER.clip_draw(self.xSprite, self.ySprite * self.directTemp,
+            if self.direct == self.DIRECT_DOWN:
+                ch = self.WATER_DOWN
+            else:
+                ch = self.WATER_LR
+            self.WATER.clip_draw(self.xSprite * ch, self.ySprite * self.directTemp,
                               self.xSprite, self.ySprite, self.x, self.y, self.SIZE, self.SIZE)
 
 
