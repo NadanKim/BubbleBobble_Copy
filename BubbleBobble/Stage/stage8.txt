@@ -35,10 +35,20 @@
 	]
 	},
  "object":{
-	"kind":[],
+	"kind":["NORMAL", "NORMAL"],
 	"coordinate":[
-	]
+	{
+	"x":365,
+	"y":0
 	},
+	{
+	"x":838,
+	"y":0
+	}
+	],
 	"maketime":[
+	3.5,
+	3.5
 	]
+	}
 }

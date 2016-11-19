@@ -28,8 +28,8 @@
  "object":{
 	"kind":[],
 	"coordinate":[
-	]
-	},
+	],
 	"maketime":[
 	]
+	}
 }

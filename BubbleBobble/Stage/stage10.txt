@@ -49,8 +49,8 @@
  "object":{
 	"kind":[],
 	"coordinate":[
-	]
-	},
+	],
 	"maketime":[
 	]
+	}
 }

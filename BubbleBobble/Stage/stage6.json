@@ -70,6 +70,86 @@
                  "width":50,
                  "x":925,
                  "y":675
+                }, 
+                {
+                 "ellipse":true,
+                 "height":10.2325581395349,
+                 "id":10,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":10
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"WATER",
+                 "visible":true,
+                 "width":50,
+                 "x":350,
+                 "y":0
+                }, 
+                {
+                 "ellipse":true,
+                 "height":9.30232558139539,
+                 "id":11,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":10
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"WATER",
+                 "visible":true,
+                 "width":47.5581395348837,
+                 "x":825,
+                 "y":0
+                }, 
+                {
+                 "ellipse":true,
+                 "height":10.2326,
+                 "id":13,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":10
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"NORMAL",
+                 "visible":true,
+                 "width":50,
+                 "x":350,
+                 "y":0
+                }, 
+                {
+                 "ellipse":true,
+                 "height":10.2326,
+                 "id":14,
+                 "name":"BBH",
+                 "properties":
+                    {
+                     "MakeTime":10
+                    },
+                 "propertytypes":
+                    {
+                     "MakeTime":"float"
+                    },
+                 "rotation":0,
+                 "type":"NORMAL",
+                 "visible":true,
+                 "width":50,
+                 "x":825,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -78,7 +158,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":8,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tileheight":25,
