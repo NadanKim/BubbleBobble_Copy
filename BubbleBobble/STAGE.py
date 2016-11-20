@@ -27,7 +27,7 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 7
+        self.currentStage = 10
         self.stageMoveCount = 0.0
         self.stageSize = 25
         self.tileSize = 12.5
@@ -298,7 +298,7 @@ class STAGE:
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
-        if self.currentStage == 11:
+        if self.currentStage == 12:
             self.currentStage = 100
             self.musics[2].play()
         elif self.currentStage == 101:
@@ -365,14 +365,19 @@ class STAGE:
                 if self.player.jumpPoint == 1:
                     if self.player.get_bb_left() < tile.get_bb_right() and tile.get_bb_left() < self.player.get_bb_right() :
                         continue
+                print(self.player.y)
                 if self.player.state == self.player.STATE_MOVE or self.player.stateTemp == self.player.STATE_MOVE:
+                    if self.player.state == self.player.STATE_DOWN:
+                        ychecker = self.player.y
+                    else:
+                        ychecker = self.player.get_bb_bottom()
                     if self.player.direct == self.player.DIRECT_LEFT and not 675 <= tile.y and tile.get_bb_left() < self.player.get_bb_left():
-                        if tile.get_bb_bottom() <= self.player.y and self.player.y <= tile.get_bb_top():
+                        if tile.get_bb_bottom() <= ychecker and ychecker < tile.get_bb_top():
                             if tile.get_bb_left() <= self.player.get_bb_left() and self.player.get_bb_left() <= tile.get_bb_right():
                                 self.player.x = tile.get_bb_right() + self.player.XSIZE / 2
                                 break
                     elif self.player.direct == self.player.DIRECT_RIGHT and not 675 <= tile.y and self.player.get_bb_right() < tile.get_bb_right():
-                        if tile.get_bb_bottom() <= self.player.y and self.player.y <= tile.get_bb_top():
+                        if tile.get_bb_bottom() <= ychecker and ychecker < tile.get_bb_top():
                             if tile.get_bb_left() <= self.player.get_bb_right() and self.player.get_bb_right() <= tile.get_bb_right():
                                 self.player.x = tile.get_bb_left() - self.player.XSIZE / 2
                                 break
