@@ -80,7 +80,7 @@ class ITEM:
         if self.direct == self.DIRECT_DOWN:
             self.y -= frameTime * self.moveSpeedPPS
             if self.y < self.YSIZE / 2:
-                self.y = 800
+                self.y = 700
         if self.state == self.STATE_FONT:
             self.fontTime += frameTime
             self.y += 2
