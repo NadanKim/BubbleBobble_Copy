@@ -91,6 +91,12 @@ class MAGICIAN():
         draw_rectangle(*self.get_bb())
 
 
+    def stuck_by_bubble(self):
+        self.totalFrame = 0
+        self.state = self.STATE_STUCK_GREEN
+        self.direct = self.DIRECT_UP
+
+
     def handle_walk(self):
         if self.state == self.STATE_DOWN:
             divide = 2

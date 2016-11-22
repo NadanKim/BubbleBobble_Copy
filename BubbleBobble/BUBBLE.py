@@ -98,6 +98,15 @@ class BUBBLE:
         draw_rectangle(*self.get_bb())
 
 
+    def touch_enemy(self, kind):
+        if kind not in ("BOSS", "SKULL"):
+            self.state = self.STATE_NONE
+        else:
+            self.frame = 0
+            self.mode = self.ATTACK_NORMAL
+            self.state = self.STATE_PON
+
+
     def draw(self):
         self.sprite.clip_draw(self.xSprite * self.frame, self.ySprite * self.state,
                               self.xSprite, self.ySprite, self.x, self.y, self.RADIUS, self.RADIUS)

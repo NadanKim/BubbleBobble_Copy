@@ -183,16 +183,12 @@ class STAGE:
             for enemy in self.enemies:
                 if not enemy.TYPE in ('BOSS', "SKULL") and enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON) \
                         and contact_check_two_object(self.bubbles[-1], enemy):
-                    enemy.totalFrame = 0
-                    enemy.state = enemy.STATE_STUCK_GREEN
-                    enemy.direct = enemy.DIRECT_UP
-                    self.bubbles[-1].state = self.bubbles[-1].STATE_NONE
+                    enemy.stuck_by_bubble()
+                    self.bubbles[-1].touch_enemy(enemy.TYPE)
                     break
                 elif enemy.TYPE in('BOSS', "SKULL") and contact_check_two_object(self.bubbles[-1], enemy):
-                    self.bubbles[-1].frame = 0
-                    self.bubbles[-1].mode = self.bubbles[-1].ATTACK_NORMAL
-                    self.bubbles[-1].state = self.bubbles[-1].STATE_PON
-                    self.player.score += 20
+                    self.bubbles[-1].touch_enemy(enemy.TYPE)
+                    self.player.earn_score(20)
                     break
         #enemy's attack check
         if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
@@ -222,10 +218,10 @@ class STAGE:
                         self.sounds.play()
                         enemy.change_actionPerTime()
                         if enemy.TYPE == 'BOSS':
-                            self.player.score += 10000
+                            self.player.earn_score(10000)
                             self.musics[3].play()
                         else:
-                            self.player.score += 100
+                            self.player.earn_score(100)
             for attack in self.attacks:
                 if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
                     if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
@@ -251,7 +247,7 @@ class STAGE:
                 bubble.totalFrame = 0.0
                 bubble.direct = self.player.direct
                 bubble.state = bubble.STATE_PON
-                self.player.score += 20
+                self.player.earn_score(20)
         #player contack stage
         self.contact_check_stage_player()
         #enemy contack stage
@@ -587,7 +583,7 @@ class STAGE:
                 item.state = item.STATE_FONT
                 item.direct = item.DIRECT_STAY
                 item.sounds.play()
-                self.player.score += item.score
+                self.player.earn_score(item.score)
                 if item.itemNumber == item.KIND_HEALTH:
                     self.player.playerHealth += 1
                 elif item.itemNumber == item.KIND_RUN:
@@ -628,7 +624,7 @@ class STAGE:
                         enemy.frame = enemy.totalFrame = 0
                         enemy.state = enemy.STATE_DEAD
                         enemy.change_actionPerTime()
-                        self.player.score += 100
+                        self.player.earn_score(100)
                         if effect.state == effect.STATE_THUNDER:
                             self.effects.append(EFFECT(enemy.x, enemy.y, EFFECT.STATE_THUNDER_POW, enemy.direct))
                             effect.sounds[0].play()

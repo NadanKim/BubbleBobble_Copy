@@ -117,6 +117,10 @@ class PLAYER():
         draw_rectangle(*self.get_bb())
 
 
+    def earn_score(self, point):
+        self.score += point
+
+
     def handle_event(self, event):
         if not self.state == self.STATE_DEAD and not self.state == self.STATE_STAGEMOVE and not self.state == self.STATE_BURN:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
