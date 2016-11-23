@@ -179,75 +179,12 @@ class STAGE:
         self.contact_check_stage_bubble()
         self.contact_check_stage_enemyBubble()
         #player's attack check
-        if not self.bubbles == [] and self.bubbles[-1].state == self.bubbles[-1].STATE_FLY:
-            for enemy in self.enemies:
-                if not enemy.TYPE in ('BOSS', "SKULL") and enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON) \
-                        and contact_check_two_object(self.bubbles[-1], enemy):
-                    enemy.stuck_by_bubble()
-                    self.bubbles[-1].touch_enemy(enemy.TYPE)
-                    break
-                elif enemy.TYPE in('BOSS', "SKULL") and contact_check_two_object(self.bubbles[-1], enemy):
-                    self.bubbles[-1].touch_enemy(enemy.TYPE)
-                    self.player.earn_score(20)
-                    break
+        self.contact_check_playerattack_enemy()
         #enemy's attack check
-        if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN and not self.player.state == self.player.STATE_STAGEMOVE:
-            for enemy in self.enemies:
-                #enemy is alive
-                if enemy.state not in(enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED, enemy.STATE_NONE, enemy.STATE_PON):
-                    if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, enemy):
-                        self.player.frame = self.player.totalFrame = 0
-                        self.player.state = self.player.STATE_DEAD
-                        self.playTime = 0.0
-                        self.skullAppear = 1
-                        for enemy in self.enemies:
-                            if not enemy.state == enemy.STATE_WALK:
-                                continue
-                            if enemy.TYPE == 'SKULL':
-                                enemy.frame = enemy.totalFrame = 0
-                                enemy.state = enemy.STATE_DEAD
-                        self.hurry = False
-                        self.player.sounds[2].play()
-                        self.player.change_actionPerTime()
-                #enemy is stucked
-                elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
-                    if contact_check_two_object(self.player, enemy):
-                        enemy.direct = random.randint(0, 1)
-                        enemy.frame = enemy.totalFrame = 0
-                        enemy.state = enemy.STATE_DEAD
-                        self.sounds.play()
-                        enemy.change_actionPerTime()
-                        if enemy.TYPE == 'BOSS':
-                            self.player.earn_score(10000)
-                            self.musics[3].play()
-                        else:
-                            self.player.earn_score(100)
-            for attack in self.attacks:
-                if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
-                    if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(self.player, attack):
-                        self.player.frame = self.player.totalFrame = 0
-                        self.player.state = self.player.STATE_DEAD
-                        self.player.sounds[2].play()
-                        self.playTime = 0.0
-                        self.skullAppear = 1
-                        for enemy in self.enemies:
-                            if not enemy.state == enemy.STATE_WALK:
-                                continue
-                            if enemy.TYPE == 'SKULL':
-                                enemy.frame = enemy.totalFrame = 0
-                                enemy.state = enemy.STATE_DEAD
-                        self.hurry = False
-                        self.player.change_actionPerTime()
+        self.contact_check_player_enemy()
+        self.contact_check_enemyattack_player()
         #bubble contack player
-        for bubble in self.bubbles:
-            if self.player.state in(self.player.STATE_DEAD, self.player.STATE_BURN, self.player.STATE_STAGEMOVE) or\
-                            bubble.state in (bubble.STATE_FLY, bubble.STATE_PON, bubble.STATE_NONE):
-                continue
-            if contact_check_two_object(bubble, self.player):
-                bubble.totalFrame = 0.0
-                bubble.direct = self.player.direct
-                bubble.state = bubble.STATE_PON
-                self.player.earn_score(20)
+        self.contact_check_bubble_player()
         #player contack stage
         self.contact_check_stage_player()
         #enemy contack stage
@@ -256,8 +193,7 @@ class STAGE:
         #enemy attack contact stage
         self.contack_check_stage_enemyAttack()
         #player and item contact check
-        if self.player.state not in (self.player.STATE_DEAD, self.player.STATE_STAGEMOVE, self.player.STATE_BURN):
-            self.contact_check_player_item()
+        self.contact_check_player_item()
         #item and stage contact
         self.contact_check_stage_item()
         #effect and enemy contact
@@ -353,6 +289,95 @@ class STAGE:
             Count += 1
 
 
+    def contact_check_playerattack_enemy(self):
+        if not self.bubbles == [] and self.bubbles[-1].state == self.bubbles[-1].STATE_FLY:
+            for enemy in self.enemies:
+                if not contact_check_two_object(self.bubbles[-1], enemy):
+                    continue
+                if enemy.state in (enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,
+                enemy.STATE_NONE, enemy.STATE_PON):
+                    continue
+                if enemy.TYPE not in ('BOSS', "SKULL"):
+                    enemy.stuck_by_bubble(self.bubbles[-1].direct)
+                    self.bubbles[-1].touch_enemy(enemy.TYPE)
+                    break
+                elif enemy.TYPE in('BOSS', "SKULL"):
+                    self.bubbles[-1].touch_enemy(enemy.TYPE)
+                    self.player.earn_score(20)
+                    break
+
+    def contact_check_player_enemy(self):
+        if self.player.state in (self.player.STATE_DEAD, self.player.STATE_BURN, self.player.STATE_STAGEMOVE):
+            return
+        for enemy in self.enemies:
+            # enemy is alive
+            if enemy.state not in (
+            enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,
+            enemy.STATE_NONE, enemy.STATE_PON):
+                if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(
+                        self.player, enemy):
+                    self.player.frame = self.player.totalFrame = 0
+                    self.player.state = self.player.STATE_DEAD
+                    self.playTime = 0.0
+                    self.skullAppear = 1
+                    for enemy in self.enemies:
+                        if not enemy.state == enemy.STATE_WALK:
+                            continue
+                        if enemy.TYPE == 'SKULL':
+                            enemy.frame = enemy.totalFrame = 0
+                            enemy.state = enemy.STATE_DEAD
+                    self.hurry = False
+                    self.player.sounds[2].play()
+                    self.player.change_actionPerTime()
+            # enemy is stucked
+            elif enemy.state == enemy.STATE_STUCK_GREEN or enemy.state == enemy.STATE_STUCK_YELLOW or enemy.state == enemy.STATE_STUCK_RED:
+                if contact_check_two_object(self.player, enemy):
+                    enemy.direct = random.randint(0, 1)
+                    enemy.frame = enemy.totalFrame = 0
+                    enemy.state = enemy.STATE_DEAD
+                    self.sounds.play()
+                    enemy.change_actionPerTime()
+                    if enemy.TYPE == 'BOSS':
+                        self.player.earn_score(10000)
+                        self.musics[3].play()
+                    else:
+                        self.player.earn_score(100)
+
+
+    def contact_check_enemyattack_player(self):
+        if self.player.state in (self.player.STATE_DEAD, self.player.STATE_BURN, self.player.STATE_STAGEMOVE):
+            return
+        for attack in self.attacks:
+            if not attack.state == attack.STATE_BOOM and not attack.state == attack.STATE_NONE:
+                if self.player.noDie == False and not self.player.state == self.player.STATE_DEAD and contact_check_two_object(
+                        self.player, attack):
+                    self.player.frame = self.player.totalFrame = 0
+                    self.player.state = self.player.STATE_DEAD
+                    self.player.sounds[2].play()
+                    self.playTime = 0.0
+                    self.skullAppear = 1
+                    for enemy in self.enemies:
+                        if not enemy.state == enemy.STATE_WALK:
+                            continue
+                        if enemy.TYPE == 'SKULL':
+                            enemy.frame = enemy.totalFrame = 0
+                            enemy.state = enemy.STATE_DEAD
+                    self.hurry = False
+                    self.player.change_actionPerTime()
+
+
+    def contact_check_bubble_player(self):
+        for bubble in self.bubbles:
+            if self.player.state in(self.player.STATE_DEAD, self.player.STATE_BURN, self.player.STATE_STAGEMOVE) or\
+                            bubble.state in (bubble.STATE_FLY, bubble.STATE_PON, bubble.STATE_NONE):
+                continue
+            if contact_check_two_object(bubble, self.player):
+                bubble.totalFrame = 0.0
+                bubble.direct = self.player.direct
+                bubble.state = bubble.STATE_PON
+                self.player.earn_score(20)
+
+
     def contact_check_stage_player(self):
         for tile in self.stages:
             if not self.player.state == self.player.STATE_DEAD and not self.player.state == self.player.STATE_BURN \
@@ -397,7 +422,11 @@ class STAGE:
 
     def contact_check_stage_walker(self):
         for enemy in self.enemies:
-            if not enemy.TYPE in ("WALKER", "MAGICIAN") or enemy.state in (enemy.STATE_NONE, enemy.STATE_PON):
+            if not enemy.TYPE in ("WALKER", "MAGICIAN"):
+                continue
+            if enemy.state in (
+                    enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,
+                    enemy.STATE_NONE, enemy.STATE_PON):
                 continue
             for tile in self.stages:
                 # check left or right tile
@@ -437,7 +466,11 @@ class STAGE:
 
     def contact_check_stage_flying(self):
         for enemy in self.enemies:
-            if enemy.TYPE in ("WALKER", "MAGICIAN", "BOSS", "SKULL")  or enemy.state in (enemy.STATE_NONE, enemy.STATE_PON):
+            if enemy.TYPE in ("WALKER", "MAGICIAN", "BOSS", "SKULL"):
+                continue
+            if enemy.state in (
+                    enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,
+                    enemy.STATE_NONE, enemy.STATE_PON):
                 continue
             for tile in self.stages:
                 # check left or right tile
@@ -495,7 +528,7 @@ class STAGE:
                                 bubble.state = bubble.STATE_WATER
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.direct != bubble.DIRECT_RIGHT and bubble.x - bubble.RADIUS / 2 <= 50:
+                        if bubble.directTemp != bubble.DIRECT_RIGHT and bubble.x - bubble.RADIUS / 2 <= 50:
                             bubble.directTemp = bubble.DIRECT_RIGHT
                             bubble.direct = bubble.DIRECT_UP
                         elif not contact_check_two_object(bubble, tile):
@@ -513,7 +546,7 @@ class STAGE:
                                 bubble.state = bubble.STATE_WATER
                             bubble.direct = bubble.DIRECT_UP
                     else:
-                        if bubble.direct != bubble.DIRECT_LEFT and 1150 <= bubble.x + bubble.RADIUS / 2:
+                        if bubble.directTemp != bubble.DIRECT_LEFT and 1150 <= bubble.x + bubble.RADIUS / 2:
                             bubble.directTemp = bubble.DIRECT_LEFT
                             bubble.direct = bubble.DIRECT_UP
                         elif not contact_check_two_object(bubble, tile):
@@ -539,10 +572,10 @@ class STAGE:
                     elif not contact_check_two_object(enemy, tile):
                         enemy.direct = enemy.DIRECT_UP
                 elif enemy.direct == enemy.DIRECT_RIGHT:
-                    if not contact_check_two_object(enemy, tile):
-                        enemy.direct = enemy.DIRECT_UP
                     if enemy.directTemp != enemy.DIRECT_LEFT and 1150 <= enemy.x + enemy.XSIZE / 2:
                         enemy.directTemp = enemy.DIRECT_LEFT
+                        enemy.direct = enemy.DIRECT_UP
+                    elif not contact_check_two_object(enemy, tile):
                         enemy.direct = enemy.DIRECT_UP
 
 
@@ -576,6 +609,8 @@ class STAGE:
 
 
     def contact_check_player_item(self):
+        if self.player.state in (self.player.STATE_DEAD, self.player.STATE_STAGEMOVE, self.player.STATE_BURN):
+            return
         for item in self.items:
             if item.state in(item.STATE_NONE, item.STATE_FONT):
                 continue
@@ -605,9 +640,14 @@ class STAGE:
                 if enemy.state in (
                 enemy.STATE_DEAD, enemy.STATE_STUCK_GREEN, enemy.STATE_STUCK_YELLOW, enemy.STATE_STUCK_RED,#
                 enemy.STATE_NONE, enemy.STATE_PON):
-                    continue
-                if enemy.TYPE == 'BOSS' and effect.state == effect.STATE_THUNDER:
+                    pass
+                if enemy.TYPE == 'BOSS':
                     if contact_check_two_object(effect, enemy):
+                        if not effect.state == effect.STATE_THUNDER:
+                            effect.frame = effect.totalFrame = 0
+                            effect.state = effect.STATE_NONE
+                            self.player.earn_score(10)
+                            break
                         enemy.health -= 1
                         if enemy.state == enemy.STATE_WALK and enemy.health <= 10:
                             enemy.state = enemy.STATE_ANGRY

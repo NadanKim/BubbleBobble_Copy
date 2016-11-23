@@ -90,11 +90,11 @@ class MAGICIAN():
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
-
-    def stuck_by_bubble(self):
+    def stuck_by_bubble(self, attackDirect):
         self.totalFrame = 0
         self.state = self.STATE_STUCK_GREEN
         self.direct = self.DIRECT_UP
+        self.directTemp = attackDirect
 
 
     def handle_walk(self):
