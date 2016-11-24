@@ -41,7 +41,8 @@ class EFFECT:
             self.xSprite = 8
             self.ySprite = 8
             self.numSprite = 6
-            self.SIZE = 25
+            self.SIZE = 20
+            self.y -= self.SIZE * 1.5
         self.moveSpeedPPS = self.change_moveSpeed(self.MOVE_SPEED_KMPH)
 
         if EFFECT.THUNDER == None:

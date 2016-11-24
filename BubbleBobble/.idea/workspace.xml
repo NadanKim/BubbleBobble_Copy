@@ -20,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="STAGE.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="STAGE.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/STAGE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-190">
-              <caret line="424" column="56" selection-start-line="424" selection-start-column="56" selection-end-line="424" selection-end-column="56" />
+            <state relative-caret-position="-1920">
+              <caret line="227" column="30" selection-start-line="227" selection-start-column="30" selection-end-line="227" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -33,7 +33,7 @@
       <file leaf-file-name="PULPUL.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PULPUL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="521">
+            <state relative-caret-position="2268">
               <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
               <folding />
             </state>
@@ -43,7 +43,7 @@
       <file leaf-file-name="TADPOLE.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TADPOLE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="541">
+            <state relative-caret-position="2296">
               <caret line="83" column="38" selection-start-line="83" selection-start-column="38" selection-end-line="83" selection-end-column="38" />
               <folding />
             </state>
@@ -53,7 +53,7 @@
       <file leaf-file-name="WALKER.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WALKER.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="541">
+            <state relative-caret-position="2268">
               <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
               <folding />
             </state>
@@ -63,7 +63,7 @@
       <file leaf-file-name="MAGICIAN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MAGICIAN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="707">
+            <state relative-caret-position="2632">
               <caret line="96" column="38" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
               <folding />
             </state>
@@ -83,7 +83,7 @@
       <file leaf-file-name="PLAYER.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PLAYER.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1929">
+            <state relative-caret-position="3304">
               <caret line="120" column="27" selection-start-line="120" selection-start-column="27" selection-end-line="120" selection-end-column="27" />
               <folding />
             </state>
@@ -93,18 +93,18 @@
       <file leaf-file-name="BUBBLE.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BUBBLE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2800">
+            <state relative-caret-position="1173">
               <caret line="101" column="19" selection-start-line="101" selection-start-column="19" selection-end-line="101" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EFFECT.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EFFECT.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EFFECT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3584">
-              <caret line="128" column="47" selection-start-line="128" selection-start-column="47" selection-end-line="128" selection-end-column="47" />
+            <state relative-caret-position="1064">
+              <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -149,7 +149,6 @@
         <option value="$PROJECT_DIR$/main_state.py" />
         <option value="$PROJECT_DIR$/BOSS.py" />
         <option value="$PROJECT_DIR$/OBJECT.py" />
-        <option value="$PROJECT_DIR$/EFFECT.py" />
         <option value="D:/Program Files(D)/Python/Lib/site-packages/pico2d.py" />
         <option value="$PROJECT_DIR$/ITEM.py" />
         <option value="$PROJECT_DIR$/PLAYER.py" />
@@ -159,6 +158,7 @@
         <option value="$PROJECT_DIR$/WALKER.py" />
         <option value="$PROJECT_DIR$/MAGICIAN.py" />
         <option value="$PROJECT_DIR$/STAGE.py" />
+        <option value="$PROJECT_DIR$/EFFECT.py" />
       </list>
     </option>
   </component>
@@ -193,7 +193,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -214,7 +214,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -685,25 +685,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EFFECT.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3584">
-          <caret line="128" column="47" selection-start-line="128" selection-start-column="47" selection-end-line="128" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BUBBLE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2800">
-          <caret line="101" column="19" selection-start-line="101" selection-start-column="19" selection-end-line="101" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TADPOLE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="541">
+        <state relative-caret-position="2296">
           <caret line="83" column="38" selection-start-line="83" selection-start-column="38" selection-end-line="83" selection-end-column="38" />
           <folding />
         </state>
@@ -711,7 +695,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WALKER.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="541">
+        <state relative-caret-position="2268">
           <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
           <folding />
         </state>
@@ -719,7 +703,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MAGICIAN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
+        <state relative-caret-position="2632">
           <caret line="96" column="38" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
           <folding />
         </state>
@@ -727,7 +711,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PLAYER.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1929">
+        <state relative-caret-position="3304">
           <caret line="120" column="27" selection-start-line="120" selection-start-column="27" selection-end-line="120" selection-end-column="27" />
           <folding />
         </state>
@@ -735,16 +719,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PULPUL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="521">
+        <state relative-caret-position="2268">
           <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BUBBLE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1173">
+          <caret line="101" column="19" selection-start-line="101" selection-start-column="19" selection-end-line="101" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/STAGE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-190">
-          <caret line="424" column="56" selection-start-line="424" selection-start-column="56" selection-end-line="424" selection-end-column="56" />
+        <state relative-caret-position="-1920">
+          <caret line="227" column="30" selection-start-line="227" selection-start-column="30" selection-end-line="227" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EFFECT.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1064">
+          <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
           <folding />
         </state>
       </provider>
