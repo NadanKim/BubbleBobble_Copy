@@ -1,1 +1,1 @@
-[{"round": 100, "name": [75, 78, 68], "score": 16120}, {"round": 100, "name": [67, 65, 89], "score": 13820}, {"round": 3, "name": [90, 90, 90], "score": 5000}, {"round": 3, "name": [65, 85, 65], "score": 4000}, {"round": 3, "name": [89, 88, 88], "score": 3000}]
+[{"round": 100, "name": [70, 87, 70], "score": 17420}, {"round": 100, "name": [75, 78, 68], "score": 16120}, {"round": 100, "name": [67, 65, 89], "score": 13820}, {"round": 3, "name": [90, 90, 90], "score": 5000}, {"round": 3, "name": [65, 85, 65], "score": 4000}]

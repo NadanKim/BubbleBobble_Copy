@@ -47,7 +47,7 @@ class PLAYER():
         self.sounds[1].set_volume(60)
         self.sounds[2].set_volume(40)
 
-        self.attackMode = self.ATTACK_WATER
+        self.attackMode = self.ATTACK_NORMAL
         self.currentAttackTerm = self.ATTACK_TERM_MAX
         self.couldAttack = 0 #0 then attack possible and one attack then add currentAttackTerm
         self.jumpHeight = self.JUMP_MIN
