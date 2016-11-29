@@ -23,8 +23,8 @@
       <file leaf-file-name="STAGE.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/STAGE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="641" column="42" selection-start-line="641" selection-start-column="42" selection-end-line="641" selection-end-column="42" />
+            <state relative-caret-position="341">
+              <caret line="29" column="30" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -93,7 +93,7 @@
       <file leaf-file-name="BUBBLE.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BUBBLE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1173">
+            <state relative-caret-position="2800">
               <caret line="101" column="19" selection-start-line="101" selection-start-column="19" selection-end-line="101" selection-end-column="19" />
               <folding />
             </state>
@@ -193,7 +193,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -215,6 +214,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -735,7 +735,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BUBBLE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
+        <state relative-caret-position="2800">
           <caret line="101" column="19" selection-start-line="101" selection-start-column="19" selection-end-line="101" selection-end-column="19" />
           <folding />
         </state>
@@ -743,8 +743,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/STAGE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="641" column="42" selection-start-line="641" selection-start-column="42" selection-end-line="641" selection-end-column="42" />
+        <state relative-caret-position="341">
+          <caret line="29" column="30" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
           <folding />
         </state>
       </provider>
