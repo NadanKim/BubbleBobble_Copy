@@ -27,7 +27,7 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 20
+        self.currentStage = 21
         self.stageMoveCount = 0.0
         self.stageSize = 25
         self.tileSize = 12.5
@@ -230,7 +230,7 @@ class STAGE:
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
-        if self.currentStage == 22:
+        if self.currentStage == 23:
             self.currentStage = 100
             self.musics[2].play()
         elif self.currentStage == 101:
@@ -643,11 +643,12 @@ class STAGE:
                     continue
                 if enemy.TYPE in ('BOSS', "SKULL"):
                     if contact_check_two_object(effect, enemy):
-                        if not effect.state == effect.STATE_THUNDER:
+                        if not effect.state == effect.STATE_THUNDER or enemy.TYPE == 'SKULL':
                             effect.frame = effect.totalFrame = 0
                             effect.state = effect.STATE_NONE
                             self.player.earn_score(10)
                             break
+
                         enemy.health -= 1
                         if enemy.state == enemy.STATE_WALK and enemy.health <= 10:
                             enemy.state = enemy.STATE_ANGRY

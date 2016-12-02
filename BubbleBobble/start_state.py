@@ -15,6 +15,7 @@ def enter():
     start_sound = load_music('GameSound\\Background\\GameTurnedOn.ogg')
     start_sound.set_volume(64)
     start_sound.play()
+    hide_cursor()
 
 
 def exit():
