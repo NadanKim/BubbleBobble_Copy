@@ -6,7 +6,7 @@
 	"direct":"DIRECT_RIGHT"
 	},
  "enemy":{
-	"kind":["TADPOLE", "TADPOLE", "TADPOLE", "TADPOLE", "TADPOLE"],
+	"kind":["PULPUL", "PULPUL", "PULPUL", "PULPUL", "PULPUL"],
 	"coordinate":[
 	{
 	"x":600,

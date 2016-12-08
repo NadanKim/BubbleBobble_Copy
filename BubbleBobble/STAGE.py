@@ -27,9 +27,9 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 27
+        self.currentStage = 28
         self.stageMoveCount = 0.0
-        self.stageSize = 25
+        self.stageSize = 0
         self.tileSize = 12.5
         self.tileX, tileY = 0, 0
         self.player = PLAYER()
@@ -230,7 +230,7 @@ class STAGE:
         if self.hurry:
             self.hurry = False
             self.musics[0].repeat_play()
-        if self.currentStage == 29:
+        if self.currentStage == 30 :
             self.currentStage = 100
             self.musics[2].play()
         elif self.currentStage == 101:
