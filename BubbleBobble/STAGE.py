@@ -27,7 +27,7 @@ class STAGE:
     musics = []
     sounds = None
     def __init__(self):
-        self.currentStage = 28
+        self.currentStage = 0
         self.stageMoveCount = 0.0
         self.stageSize = 0
         self.tileSize = 12.5
