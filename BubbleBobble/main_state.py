@@ -64,13 +64,16 @@ def handle_events():
                     stage.player.noDieTime = 0
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F11):    #stage move Ctrl F11
             if special_key == True:
-                stage.enemies = []
+                stage.move_to_next()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F12):    #stage move Ctrl F11
+            if special_key == True:
+                stage.move_to_last()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_F4):
             if draw_box == True:
                 draw_box = False
             else:
                 draw_box = True
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
             special_key = False
         elif stage.player.playerHealth < 0 or pause == True:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):

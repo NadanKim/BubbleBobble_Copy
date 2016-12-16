@@ -702,6 +702,15 @@ class STAGE:
                 effect.direct = effect.DIRECT_DOWN
 
 
+    def move_to_next(self):
+        self.enemies = []
+
+
+    def move_to_last(self):
+        self.currentStage = 29
+        self.enemies = []
+
+
 
 
 
